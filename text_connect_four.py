@@ -13,39 +13,39 @@ def print_board(board):
         i+=1
     return printed_board
 
-def lowest_unoccupied_line(colum, board):
+def lowest_unoccupied_line(column, board):
     line = len(board)
     lowest_line = 5
     while line >= 1:
         str_line = board[line]
-        if str_line[colum*2-1] != "#":
+        if str_line[column*2-1] != "#":
             line-=1
         else:
             lowest_line = line
             return lowest_line
 
-def replace(line, colum, board):
+def replace(line, column, board):
     try:
         str_line = board[line]
     except Exception as e:
-        print(f"Oops! Colum {colum} is already full! Pick a different colum.\n")
+        print(f"Oops! Column {column} is already full! Pick a different column.\n")
         return
     i = 0
     new_str_line = ''
     while i < len(str_line):
-        if i == colum*2-1:
+        if i == column*2-1:
             new_str_line += "X"
         else:
             new_str_line += str_line[i]
         i+=1
     board[line] = new_str_line
     return board[line]
-    
+
 def main():
     print(print_board(board))
     user = 0
     while user not in (1,2,3,4,5):
-        user = input('What colum would you like to drop your piece in?\n')
+        user = input('What column would you like to drop your piece in?\n')
         try:
             user = int(user)
             if user not in (1,2,3,4,5):
