@@ -14,6 +14,9 @@ def player_setter(player, amount):
         while len(temp_player) > 1:
             print("Sorry, you can only set one character to your player.")
             temp_player = input(f"What character do you want player {len(player)+1} to be?")
+        while temp_player in player:
+            print(f"Sorry, {temp_player} is already a used character by another player.")
+            temp_player = input(f"What character do you want player {len(player)+1} to be?")
         player += temp_player
         print(player)
         i+=1
@@ -43,7 +46,7 @@ def replace(line, column, board, player_number, player):
         str_line = board[line]
     except Exception as e:
         print(f"Oops! Column {column} is already full! Pick a different column.\n")
-        return
+        return False
     i = 0
     new_str_line = ''
     while i < len(str_line):
@@ -68,8 +71,9 @@ def main(player_number):
                 print(f"Error: '{user}' not in range 1-5\n")
         except Exception as e:
             print(f"Error: '{user}' not in range 1-5\n")
-    replace(lowest_unoccupied_line(user, board), user, board, player_number, player)
-    player_number += 1
+    check = replace(lowest_unoccupied_line(user, board), user, board, player_number, player)
+    if check != False:
+        player_number += 1
     main(player_number)
 player_number = 0
 player = player_setter(player, amount)
