@@ -1,10 +1,11 @@
 # Number of lines
-board = {1: "|1|2|3|4|5|\n",
-        2: "|#|#|#|#|#|\n",
-        3: "|#|#|#|#|#|\n",
-        4: "|#|#|#|#|#|\n",
-        5: "|#|#|#|#|#|\n",
-        6: "|#|#|#|#|#|\n"}
+board = {1: "|1|2|3|4|5|6|7|\n",
+        2: "|#|#|#|#|#|#|#|\n",
+        3: "|#|#|#|#|#|#|#|\n",
+        4: "|#|#|#|#|#|#|#|\n",
+        5: "|#|#|#|#|#|#|#|\n",
+        6: "|#|#|#|#|#|#|#|\n",
+        7: "|#|#|#|#|#|#|#|\n"}
 player = ""
 amount = int(input("How many player's do you want to play with?"))
 def player_setter(player, amount):
@@ -29,6 +30,9 @@ def print_board(board):
         printed_board += board[i]
         i+=1
     return printed_board
+
+def score():
+    pass
 
 def lowest_unoccupied_line(column, board):
     line = len(board)
@@ -63,14 +67,14 @@ def main(player_number):
         player_number = 0
     print(print_board(board))
     user = 0
-    while user not in (1,2,3,4,5):
+    while user not in (1,2,3,4,5,6,7):
         user = input('What column would you like to drop your piece in?\n')
         try:
             user = int(user)
-            if user not in (1,2,3,4,5):
-                print(f"Error: '{user}' not in range 1-5\n")
+            if user not in (1,2,3,4,5,6,7):
+                print(f"Error: '{user}' not in range 1-7\n")
         except Exception as e:
-            print(f"Error: '{user}' not in range 1-5\n")
+            print(f"Error: '{user}' not in range 1-7\n")
     check = replace(lowest_unoccupied_line(user, board), user, board, player_number, player)
     if check != False:
         player_number += 1
