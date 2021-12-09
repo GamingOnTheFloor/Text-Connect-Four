@@ -9,6 +9,12 @@ board = {1: "|1|2|3|4|5|6|7|\n",
 player = ""
 amount = int(input("How many player's do you want to play with?"))
 def player_setter(player, amount):
+#######
+#    try:
+#        amount = int(amount)
+#    except:
+#        print (f"the player number \({amount}\)must be a number")
+#######
     i = 0
     while i < amount:
         temp_player = input(f"What character do you want player {len(player)+1} to be?")
