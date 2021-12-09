@@ -1,4 +1,7 @@
 # Number of lines
+
+#######currently not working, revert to board to 7*6 for functinoing and reverted#########
+
 board = {1: "|1|2|3|4|5|6|7|\n",
         2: "|#|#|#|#|#|#|#|\n",
         3: "|#|#|#|#|#|#|#|\n",
@@ -7,27 +10,30 @@ board = {1: "|1|2|3|4|5|6|7|\n",
         6: "|#|#|#|#|#|#|#|\n",
         7: "|#|#|#|#|#|#|#|\n"}
 player = ""
-amount = int(input("How many player's do you want to play with?"))
+amount = input("How many player's do you want to play with?\n")
+def start_screen(amount):
+    amount = input("How many player's do you want to play with?\n")
 def player_setter(player, amount):
 #######
-#    try:
-#        amount = int(amount)
-#    except:
-#        print (f"the player number \({amount}\)must be a number")
+    try:
+        amount = int(amount)
+        i = 0
+        while i < amount:
+            temp_player = input(f"What character do you want player {len(player)+1} to be?")
+            while len(temp_player) > 1:
+                print("Sorry, you can only set one character to your player.")
+                temp_player = input(f"What character do you want player {len(player)+1} to be?")
+            while temp_player in player:
+                print(f"Sorry, {temp_player} is already a used character by another player.")
+                temp_player = input(f"What character do you want player {len(player)+1} to be?")
+            player += temp_player
+            print(player)
+            i+=1
+        return player
+    except:
+        print (f"the amount of players ({amount}) must be a number")
+        start_screen()
 #######
-    i = 0
-    while i < amount:
-        temp_player = input(f"What character do you want player {len(player)+1} to be?")
-        while len(temp_player) > 1:
-            print("Sorry, you can only set one character to your player.")
-            temp_player = input(f"What character do you want player {len(player)+1} to be?")
-        while temp_player in player:
-            print(f"Sorry, {temp_player} is already a used character by another player.")
-            temp_player = input(f"What character do you want player {len(player)+1} to be?")
-        player += temp_player
-        print(player)
-        i+=1
-    return player
 
 def print_board(board):
     i = 1
