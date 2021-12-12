@@ -19,13 +19,13 @@ def player_setter(player, amount):
         amount = int(amount)
         i = 0
         while i < amount:
-            temp_player = input(f"What character do you want player {len(player)+1} to be?")
+            temp_player = input(f"What character do you want player {len(player)+1} to be?\n")
             while len(temp_player) > 1:
                 print("Sorry, you can only set one character to your player.")
-                temp_player = input(f"What character do you want player {len(player)+1} to be?")
+                temp_player = input(f"What character do you want player {len(player)+1} to be\n?")
             while temp_player in player:
                 print(f"Sorry, {temp_player} is already a used character by another player.")
-                temp_player = input(f"What character do you want player {len(player)+1} to be?")
+                temp_player = input(f"What character do you want player {len(player)+1} to be\n?")
             player += temp_player
             print(player)
             i+=1
