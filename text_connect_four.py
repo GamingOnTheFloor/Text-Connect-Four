@@ -1,13 +1,13 @@
 # Number of lines
 
 
-board = {1: "|1|2|3|4|5|6|7|\n",
+board = {0: "|1|2|3|4|5|6|7|\n",
+        1: "|#|#|#|#|#|#|#|\n",
         2: "|#|#|#|#|#|#|#|\n",
         3: "|#|#|#|#|#|#|#|\n",
         4: "|#|#|#|#|#|#|#|\n",
         5: "|#|#|#|#|#|#|#|\n",
-        6: "|#|#|#|#|#|#|#|\n",
-        7: "|#|#|#|#|#|#|#|\n"}
+        6: "|#|#|#|#|#|#|#|\n"}
 
 player = ""
 
@@ -16,13 +16,17 @@ player_number = 0
 amount = ""
 
 def start_screen(amount, player = ""):
+    rows = int(input("How many rows do you want to play with? (Default is 6)\n"))
+    columns = int(input("How many columns do you want to play with? (Default is 7)\n"))
+    in_a_row = int(input("How many slots in a row to win? (Default is 4)\n")) # Might need some rewording
     try:
         amount = int(input("How many player's do you want to play with?\n")) #amount currently only gets set if the first input is a number. If it isn't, it will throw the exception and go back through the function, but won't actually set it to a number the second+ time through.
     except Exception as f:
         print (f"The amount of players '{amount}' must be a number")
         start_screen(amount)
     player = player_setter(player, amount)
-    return player
+    board = create_board(rows, columns, in_a_row)
+    return player, board
 
 def player_setter(player, amount):
     i = 0
@@ -39,16 +43,31 @@ def player_setter(player, amount):
         i+=1
     return player
 
-def create_board(board = {}):
-    rows = input("How many rows do you want to play with? (Default is 6)")
-    columns = input("How many columns do you want to play with? (Default is 7)")
-    in_a_row = input("How many slots in a row to win? (Default is 4)") # Might need some rewording
+def create_board(rows = 6, columns = 7, in_a_row = 4, board = {}):
+    i = 0
+    string = "|"
+    string_num = "|"
+    while i <= columns - 1:
+        string += "#|"
+        print(string)
+        string_num += f"{i + 1}|"
+        i+=1
+    string += "\n"
+    string_num += "\n"
+    board[0] = string_num
+    i = 1
+    while i <= rows:
+        board[i] = string
+        print(board)
+        i+=1
+    return board
 
 
 def print_board(board):
-    i = 1
+    i = 0
     printed_board = '\n'
-    while i <= len(board):
+    while i < len(board):
+        print(f"pb = {printed_board}\nb = {board}\ni = {i}")
         printed_board += board[i]
         i+=1
     return printed_board
@@ -57,9 +76,11 @@ def score():
     pass
 
 def lowest_unoccupied_line(column, board):
-    line = len(board)
+    line = len(board)-1
     lowest_line = 5
+    str_line = ""
     while line >= 1:
+        print(f"str_line = {str_line}\nboard = {board}\nline = {line}")
         str_line = board[line]
         if str_line[column*2-1] != "#":
             line-=1
@@ -99,7 +120,8 @@ def main(player_number, player):
                 print(f"Error: '{user}' not in range 1-{len(board)}\n")
         except Exception as e:
             if user == "q":
-                print ("goodbye")
+                print ("Goodbye")
+                return
             else:
                 print(f"Error: '{user}' not in range 1-{len(board)}\n")
     check = replace(lowest_unoccupied_line(user, board), user, board, player_number, player)
@@ -108,5 +130,5 @@ def main(player_number, player):
     main(player_number, player)
 
 # Line below this has to stay outside of main() otherwise it gets called multiple times and we only want it to get called once.
-player = start_screen(amount, player)
+player, board = start_screen(amount, player)
 main(player_number, player)
