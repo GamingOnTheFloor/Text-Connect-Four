@@ -36,7 +36,7 @@ def start_screen(amount, player = ""):
     amount = input("How many player's do you want to play with?\n")
     if amount == "":
         amount = 2
-    elif amount  :
+    else:
         try:
             amount = int(amount) #amount currently only gets set if the first input is a number. If it isn't, it will throw the exception and go back through the function, but won't actually set it to a number the second+ time through.
         except Exception as f:
@@ -68,7 +68,12 @@ def create_board(rows = 6, columns = 7, in_a_row = 4, board = {}):
     string = "|"
     string_num = "|"
     while i <= columns - 1:
-        string += "#|"
+        if i > 99:
+            string += "  #|"
+        elif i > 9:
+            string += " #|"
+        else:
+            string += "#|"
         print(string)
         string_num += f"{i + 1}|"
         i+=1
