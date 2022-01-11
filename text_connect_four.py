@@ -1,4 +1,6 @@
 # Number of lines
+# using tabs instead of 4 spaces
+
 
 
 board = {0: "|1|2|3|4|5|6|7|\n",
@@ -16,14 +18,30 @@ player_number = 0
 amount = ""
 
 def start_screen(amount, player = ""):
-    rows = int(input("How many rows do you want to play with? (Default is 6)\n"))
-    columns = int(input("How many columns do you want to play with? (Default is 7)\n"))
-    in_a_row = int(input("How many slots in a row to win? (Default is 4)\n")) # Might need some rewording
-    try:
-        amount = int(input("How many player's do you want to play with?\n")) #amount currently only gets set if the first input is a number. If it isn't, it will throw the exception and go back through the function, but won't actually set it to a number the second+ time through.
-    except Exception as f:
-        print (f"The amount of players '{amount}' must be a number")
-        start_screen(amount)
+    rows = input("How many rows do you want to play with? (Default is 6)\n")
+    if rows == "":
+        rows = 6
+    else:
+        rows = int(rows)
+    columns = input("How many columns do you want to play with? (Default is 7)\n")
+    if columns == "":
+        columns = 7
+    else:
+        columns = int(columns)
+    in_a_row = input("What is the score to win? (Default is 4)\n") # Might need some rewording (how many spots in a row to win?)
+    if in_a_row == "":
+        in_a_row = 4
+    else:
+        in_a_row = int(in_a_row)
+    amount = input("How many player's do you want to play with?\n")
+    if amount == "":
+        amount = 2
+    elif amount  :
+        try:
+            amount = int(amount) #amount currently only gets set if the first input is a number. If it isn't, it will throw the exception and go back through the function, but won't actually set it to a number the second+ time through.
+        except Exception as f:
+            print (f"The amount of players '{amount}' must be a number")
+            start_screen(amount)
     player = player_setter(player, amount)
     board = create_board(rows, columns, in_a_row)
     return player, board
@@ -32,6 +50,8 @@ def player_setter(player, amount):
     i = 0
     while i < int(amount):
         temp_player = input(f"What character do you want player {len(player)+1} to be?\n")
+        if temp_player == "":
+            temp_player = f"{len(player)}"
         while len(temp_player) > 1 or temp_player in player:
             if len(temp_player) > 1:
                 print("Sorry, you can only set one character to your player.")
