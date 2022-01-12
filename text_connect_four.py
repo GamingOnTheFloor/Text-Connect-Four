@@ -21,7 +21,7 @@ def start_screen(amount = "", player = ""):
     set_rows()
     set_columns()
     set_score()
-    set_player_number()
+    set_player_number(amount)
     player = player_setter(player, amount)
     board = create_board(rows, columns, in_a_row)
     return player, board
@@ -68,7 +68,8 @@ def set_player_number(amount = ""):
             amount = int(amount) #amount currently only gets set if the first input is a number. If it isn't, it will throw the exception and go back through the function, but won't actually set it to a number the second+ time through.
         except Exception as f:
             print (f"The amount of players '{amount}' must be a number")
-            set_player_number()
+            set_player_number(amount)
+            return amount
 
 def player_setter(player, amount):
     i = 0
