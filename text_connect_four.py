@@ -17,22 +17,49 @@ player_number = 0
 
 amount = ""
 
-def start_screen(amount, player = ""):
+def start_screen(amount = "", player = ""):
+    set_rows()
+    set_columns()
+    set_score()
+    set_player_number()
+    player = player_setter(player, amount)
+    board = create_board(rows, columns, in_a_row)
+    return player, board
+
+def set_rows(rows = ""):
     rows = input("How many rows do you want to play with? (Default is 6)\n")
     if rows == "":
         rows = 6
     else:
-        rows = int(rows)
+        try:
+            rows = int(rows)
+        except Exception as f:
+            print (f"The amount of rows '{rows}' must be a number")
+            set_rows()
+#        rows = int(rows)
+def set_columns(collumns = ""):
     columns = input("How many columns do you want to play with? (Default is 7)\n")
     if columns == "":
         columns = 7
     else:
-        columns = int(columns)
+        try:
+            columns = int(columns)
+        except Exception as f:
+            print (f"The amount of columns '{columns}' must be a number")
+            set_columns()
+#        columns = int(columns)
+def set_score(in_a_row = ""):
     in_a_row = input("What is the score to win? (Default is 4)\n") # Might need some rewording (how many spots in a row to win?)
     if in_a_row == "":
         in_a_row = 4
     else:
-        in_a_row = int(in_a_row)
+        try:
+            in_a_row = int(in_a_row)
+        except Exception as f:
+            print (f"The score to win '{in_a_row}' must be a number")
+            set_score()
+#        in_a_row = int(in_a_row)
+def set_player_number(amount = ""):
     amount = input("How many player's do you want to play with?\n")
     if amount == "":
         amount = 2
@@ -41,10 +68,7 @@ def start_screen(amount, player = ""):
             amount = int(amount) #amount currently only gets set if the first input is a number. If it isn't, it will throw the exception and go back through the function, but won't actually set it to a number the second+ time through.
         except Exception as f:
             print (f"The amount of players '{amount}' must be a number")
-            start_screen(amount)
-    player = player_setter(player, amount)
-    board = create_board(rows, columns, in_a_row)
-    return player, board
+            set_player_number()
 
 def player_setter(player, amount):
     i = 0
@@ -68,9 +92,9 @@ def create_board(rows = 6, columns = 7, in_a_row = 4, board = {}):
     string = "|"
     string_num = "|"
     while i <= columns - 1:
-        if i > 99:
+        if i > 98:
             string += "  #|"
-        elif i > 9:
+        elif i > 8:
             string += " #|"
         else:
             string += "#|"
