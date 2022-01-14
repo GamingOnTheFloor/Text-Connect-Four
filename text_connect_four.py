@@ -21,7 +21,7 @@ def start_screen(amount = "", player = ""):
     set_rows()
     set_columns()
     set_score()
-    set_player_number(amount)
+    amount = set_player_number(amount)
     player = player_setter(player, amount)
     board = create_board(rows, columns, in_a_row)
     return player, board
@@ -59,7 +59,7 @@ def set_score(in_a_row = ""):
             print (f"The score to win '{in_a_row}' must be a number")
             set_score()
 #        in_a_row = int(in_a_row)
-def set_player_number(amount = ""):
+def set_player_number(amount):
     amount = input("How many player's do you want to play with?\n")
     if amount == "":
         amount = 2
@@ -69,7 +69,7 @@ def set_player_number(amount = ""):
         except Exception as f:
             print (f"The amount of players '{amount}' must be a number")
             set_player_number(amount)
-            return amount
+    return amount
 
 def player_setter(player, amount):
     i = 0
