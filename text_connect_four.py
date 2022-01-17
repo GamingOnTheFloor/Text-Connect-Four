@@ -17,6 +17,12 @@ player_number = 0
 
 amount = ""
 
+rows = 0
+
+columns = 0
+
+in_a_row = 0
+
 def start_screen(amount = "", player = ""):
     set_rows()
     set_columns()
@@ -101,7 +107,7 @@ def create_board(rows = 6, columns = 7, in_a_row = 4, board = {}):
             string += "#|"
         print(string)
         string_num += f"{i + 1}|"
-        i+=1
+        i += 1
     string += "\n"
     string_num += "\n"
     board[0] = string_num
@@ -109,7 +115,7 @@ def create_board(rows = 6, columns = 7, in_a_row = 4, board = {}):
     while i <= rows:
         board[i] = string
         print(board)
-        i+=1
+        i += 1
     return board
 
 
@@ -117,13 +123,71 @@ def print_board(board):
     i = 0
     printed_board = '\n'
     while i < len(board):
-        print(f"pb = {printed_board}\nb = {board}\ni = {i}")
+        print(f"pb = {printed_board}\nb = {board}\ni = {i}") #dude your code is borked
         printed_board += board[i]
         i+=1
     return printed_board
 
 def score():
     pass
+#1 rework the board to not have the | inbetween the #'s and it is just #'s
+#2 change the print board function to print the board but with |'s inbetween the #'s
+    back_score = 1 # for scoring in the \ direction
+    fore_score = 1 # for scoring in the / direction
+    lon_score = 1 # for scoring in the | direction
+    lat_score = 1 # for scoring in the - direction
+#have to learn how to index dictionaries again:
+    char = board[line][place_col]
+    for i in range([4]):
+        if i == 0:
+            direction = "back"
+            chng_col = 1
+            chng_row = 1
+        elif i == 1:
+            directoon = "fore"
+            chng_col = 1
+            chng_row = -1
+        elif i == 2:
+            direction = "lon"
+            chng_col = 0
+            chng_row = 1
+        elif i == 3:
+            directon = "lat"
+            chng_col = 1
+            chng_row = 0
+        else:
+            direction = "back"
+            chng_col = 1
+            chng_row = 1
+        srt_chng_col = chng_col
+        srt_chng_row = chng_row
+        for i in range([in_a_row]):
+            while board[line+chng_row:place_col+chng_col] == char:
+                chng_col += srt_chng_col
+                chng_row += srt_chng_row
+                if direction == back:
+                    back_score += 1
+                elif direction == fore:
+                    fore_score += 1
+                elif direction == lon:
+                    lon_score += 1
+                else:
+                    lat_score += 1
+            chng_col = srt_chng_col
+            chng_row = srt_chng_row
+            while board[line-chng_row:place_col-chng_col] == char:
+                chng_col += srt_chng_col
+                chng_row += srt_chng_row
+                if direction == back:
+                    back_score += 1
+                elif direction == fore:
+                    fore_score += 1
+                elif direction == lon:
+                    lon_score += 1
+                else:
+                    lat_score += 1
+    if back_score >= in_a_row or fore_score >= in_a_row or lon_score >= in_a_row or lat_score >= in_a_row:
+        print (f"Player (change to winner) won!")
 
 def lowest_unoccupied_line(column, board):
     line = len(board)-1
@@ -137,7 +201,7 @@ def lowest_unoccupied_line(column, board):
         else:
             lowest_line = line
             return lowest_line
-
+board
 def replace(line, column, board, player_number, player):
     try:
         str_line = board[line]
@@ -159,26 +223,26 @@ def main(player_number, player):
     if player_number >= len(player):
         player_number = 0
     print(print_board(board))
-    user = 0
-    while user not in range(1,len(board)+1):
-#   while user not in (1,2,3,4,5,6,7):
-        user = input('What column would you like to drop your piece in?\n')
+    place_col = 0
+    while place_col not in range(1,len(board)+1):
+#   while place_col not in (1,2,3,4,5,6,7):
+        place_col = input('What column would you like to drop your piece in?\n')
         try:
-            user = int(user)
-            if user not in range(1,len(board)+1):
-#           if user not in (1,2,3,4,5,6,7):
-                print(f"Error: '{user}' not in range 1-{len(board)}\n")
+            place_col = int(place_col)
+            if place_col not in range(1,len(board)+1):
+#           if place_col not in (1,2,3,4,5,6,7):
+                print(f"Error: '{place_col}' not in range 1-{len(board)}\n")
         except Exception as e:
-            if user == "q":
+            if place_col == "q":
                 print ("Goodbye")
                 return
             else:
-                print(f"Error: '{user}' not in range 1-{len(board)}\n")
-    check = replace(lowest_unoccupied_line(user, board), user, board, player_number, player)
+                print(f"Error: '{place_col}' not in range 1-{len(board)}\n")
+    check = replace(lowest_unoccupied_line(place_col, board), place_col, board, player_number, player)
     if check != False:
         player_number += 1
     main(player_number, player)
 
-# Line below this has to stay outside of main() otherwise it gets called multiple times and we only want it to get called once.
+# Line below this has to stay outside of main() otherwise it gets called multiple times and we only want it to get called once. now i am trying to see how far this goes off the screen before it stops me. EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE it dosent stop me, it just makes the screen go over
 player, board = start_screen(amount, player)
 main(player_number, player)
