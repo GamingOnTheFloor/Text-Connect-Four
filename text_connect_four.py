@@ -13,6 +13,8 @@ board = {0: "|1|2|3|4|5|6|7|\n",
 
 player = ""
 
+top_line = ""
+
 player_number = 0
 
 amount = ""
@@ -94,29 +96,41 @@ def player_setter(player, amount):
         i+=1
     return player
 
-def create_board(rows = 6, columns = 7, in_a_row = 4, board = {}):
-    i = 0
-    string = "|"
-    string_num = "|"
-    while i <= columns - 1:
-        if i > 98:
-            string += "  #|"
-        elif i > 8:
-            string += " #|"
-        else:
-            string += "#|"
+def create_board(top_line = "", rows = 6, columns = 7, in_a_row = 4, board = {}):
+    for i in range(columns):
+        string += ("#")
         print(string)
-        string_num += f"{i + 1}|"
-        i += 1
-    string += "\n"
-    string_num += "\n"
-    board[0] = string_num
-    i = 1
-    while i <= rows:
+        top_line += f"{i + 1}"
+    string += "/n"
+    top_line += "/n"
+    for i in range(rows):
         board[i] = string
         print(board)
-        i += 1
     return board
+
+
+#    i = 0
+#    string = "|"
+#    string_num = "|"
+#    while i <= columns - 1:
+#        if i > 98:
+#            string += "  #|"
+#        elif i > 8:
+#            string += " #|"
+#        else:
+#            string += "#|"
+#        print(string)
+#        string_num += f"{i + 1}|"
+#        i += 1
+#    string += "\n"
+#    string_num += "\n"
+#    board[0] = string_num
+#    i = 1
+#    while i <= rows:
+#        board[i] = string
+#        print(board)
+#        i += 1
+#    return board
 
 
 def print_board(board):
@@ -137,8 +151,9 @@ def score():
     lon_score = 1 # for scoring in the | direction
     lat_score = 1 # for scoring in the - direction
 #have to learn how to index dictionaries again:
-    char = board[line][place_col]
-    for i in range([4]):
+    char = board[line]
+    temp = char[place_col]
+    for i in range(4):
         if i == 0:
             direction = "back"
             chng_col = 1
@@ -161,8 +176,8 @@ def score():
             chng_row = 1
         srt_chng_col = chng_col
         srt_chng_row = chng_row
-        for i in range([in_a_row]):
-            while board[line+chng_row:place_col+chng_col] == char:
+        for i in range(in_a_row):
+            while board[line+chng_row:place_col+chng_col] == temp:
                 chng_col += srt_chng_col
                 chng_row += srt_chng_row
                 if direction == back:
@@ -175,7 +190,7 @@ def score():
                     lat_score += 1
             chng_col = srt_chng_col
             chng_row = srt_chng_row
-            while board[line-chng_row:place_col-chng_col] == char:
+            while board[line-chng_row:place_col-chng_col] == temp:
                 chng_col += srt_chng_col
                 chng_row += srt_chng_row
                 if direction == back:
