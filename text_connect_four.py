@@ -1,7 +1,13 @@
 # Number of lines
 # using tabs instead of 4 spaces
 
-
+#check for the max score to win
+#
+#
+#
+#
+#
+#
 
 board = {0: "|1|2|3|4|5|6|7|\n",
         1: "|#|#|#|#|#|#|#|\n",
@@ -26,13 +32,13 @@ columns = 0
 in_a_row = 0
 
 def start_screen(amount = "", player = ""):
-    set_rows()
-    set_columns()
-    set_score()
-    amount = set_player_number(amount)
+    rows = set_rows()
+    columns = set_columns()
+    in_a_row = set_score(rows, columns)
+    amount = set_player_number(amount, rows, columns, in_a_row)
     player = player_setter(player, amount)
     board = create_board(rows, columns, in_a_row)
-    return player, board
+    return player, board, rows, columns
 
 def set_rows(rows = ""):
     rows = input("How many rows do you want to play with? (Default is 6)\n")
@@ -44,8 +50,9 @@ def set_rows(rows = ""):
         except Exception as f:
             print (f"The amount of rows '{rows}' must be a number")
             set_rows()
-#        rows = int(rows)
-def set_columns(collumns = ""):
+    return rows
+
+def set_columns(columns = ""):
     columns = input("How many columns do you want to play with? (Default is 7)\n")
     if columns == "":
         columns = 7
@@ -55,9 +62,18 @@ def set_columns(collumns = ""):
         except Exception as f:
             print (f"The amount of columns '{columns}' must be a number")
             set_columns()
-#        columns = int(columns)
-def set_score(in_a_row = ""):
-    in_a_row = input("What is the score to win? (Default is 4)\n") # Might need some rewording (how many spots in a row to win?)
+    return columns
+
+def set_score(rows, columns, in_a_row = ""):
+    if rows > columns:
+        print(f"columns: {columns}")
+        print(f"rows: {rows}")
+        max_score = rows
+    else:
+        print(f"columns: {columns}")
+        print(f"rows: {rows}")
+        max_score = columns
+    in_a_row = input(f"What is the score to win? The maximum possible is {max_score} (Default is 4)\n") # Might need some rewording (how many spots in a row to win?)
     if in_a_row == "":
         in_a_row = 4
     else:
@@ -65,10 +81,14 @@ def set_score(in_a_row = ""):
             in_a_row = int(in_a_row)
         except Exception as f:
             print (f"The score to win '{in_a_row}' must be a number")
-            set_score()
+            set_score(rows, columns)
+        if in_a_row > max_score:
+            print("That value is above the maximum score limit. If you wish to increase this, increase the boards columns or rows.\n")
+            set_score(rows, columns)
+    return in_a_row
 #        in_a_row = int(in_a_row)
-def set_player_number(amount):
-    amount = input("How many player's do you want to play with?\n")
+def set_player_number(amount, rows, columns, in_a_row):
+    amount = input(f"How many player's do you want to play with? the maximum value is {int((rows*columns)/in_a_row)}\n")
     if amount == "":
         amount = 2
     else:
@@ -76,24 +96,30 @@ def set_player_number(amount):
             amount = int(amount) #amount currently only gets set if the first input is a number. If it isn't, it will throw the exception and go back through the function, but won't actually set it to a number the second+ time through.
         except Exception as f:
             print (f"The amount of players '{amount}' must be a number")
-            set_player_number(amount)
+            set_player_number(amount, rows, columns, in_a_row)
+        if amount > ((rows*columns)/in_a_row):
+            print("That many players can not possibley fit on this board")
+            set_player_number(amount, rows, columns, in_a_row)
     return amount
 
 def player_setter(player, amount):
     i = 0
     while i < int(amount):
         temp_player = input(f"What character do you want player {len(player)+1} to be?\n")
-        if temp_player == "":
-            temp_player = f"{len(player)}"
-        while len(temp_player) > 1 or temp_player in player:
-            if len(temp_player) > 1:
-                print("Sorry, you can only set one character to your player.")
-                temp_player = input(f"What character do you want player {len(player)+1} to be?\n")
-            if temp_player in player:
-                print(f"Sorry, '{temp_player}' is already a used character by another player.")
-                temp_player = input(f"What character do you want player {len(player)+1} to be?\n")
-        player += temp_player
-        i+=1
+        if temp_player == "#":
+            print("player can not be \"#\"")
+        else:
+            if temp_player == "":
+                temp_player = f"{len(player)}"
+            while len(temp_player) > 1 or temp_player in player:
+                if len(temp_player) > 1:
+                    print("Sorry, you can only set one character to your player.")
+                    temp_player = input(f"What character do you want player {len(player)+1} to be?\n")
+                if temp_player in player:
+                    print(f"Sorry, '{temp_player}' is already a used character by another player.")
+                    temp_player = input(f"What character do you want player {len(player)+1} to be?\n")
+            player += temp_player
+            i+=1
     return player
 
 def create_board(top_line = "", rows = 6, columns = 7, in_a_row = 4, board = {}):
@@ -259,5 +285,5 @@ def main(player_number, player):
     main(player_number, player)
 
 # Line below this has to stay outside of main() otherwise it gets called multiple times and we only want it to get called once. now i am trying to see how far this goes off the screen before it stops me. EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE it dosent stop me, it just makes the screen go over
-player, board = start_screen(amount, player)
+player, board, rows, columns = start_screen(amount, player)
 main(player_number, player)
