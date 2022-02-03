@@ -2,7 +2,7 @@
 # using tabs instead of 4 spaces
 
 #check for the max score to win
-#
+# lowest_unoccupied_line() and replace() aren't working due to us changing how the background board and printed board works. Background board no longer includes |, so we should just need to edit some indexing values. 
 #
 #
 #
@@ -37,8 +37,8 @@ def start_screen(amount = "", player = ""):
     in_a_row = set_score(rows, columns)
     amount = set_player_number(amount, rows, columns, in_a_row)
     player = player_setter(player, amount)
-    board = create_board(rows, columns, in_a_row)
-    return player, board, rows, columns
+    board, top_line = create_board(rows, columns, in_a_row)
+    return player, board, rows, columns, in_a_row, top_line
 
 def set_rows(rows = ""):
     rows = input("How many rows do you want to play with? (Default is 6)\n")
@@ -122,17 +122,17 @@ def player_setter(player, amount):
             i+=1
     return player
 
-def create_board(top_line = "", rows = 6, columns = 7, in_a_row = 4, board = {}):
+def create_board(rows = 6, columns = 7, in_a_row = 4, board = {}, string = "", top_line = ""):
     for i in range(columns):
         string += ("#")
         print(string)
         top_line += f"{i + 1}"
-    string += "/n"
-    top_line += "/n"
+    string += "\n"
+    top_line += "\n"
     for i in range(rows):
         board[i] = string
-        print(board)
-    return board
+        print(f"This is the board: \n{board}")
+    return board, top_line
 
 
 #    i = 0
@@ -285,5 +285,5 @@ def main(player_number, player):
     main(player_number, player)
 
 # Line below this has to stay outside of main() otherwise it gets called multiple times and we only want it to get called once. now i am trying to see how far this goes off the screen before it stops me. EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE it dosent stop me, it just makes the screen go over
-player, board, rows, columns = start_screen(amount, player)
+player, board, rows, columns, in_a_row, top_line = start_screen(amount, player)
 main(player_number, player)
