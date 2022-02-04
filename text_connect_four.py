@@ -2,7 +2,7 @@
 # using tabs instead of 4 spaces
 
 #check for the max score to win
-# lowest_unoccupied_line() and replace() aren't working due to us changing how the background board and printed board works. Background board no longer includes |, so we should just need to edit some indexing values. 
+# lowest_unoccupied_line() and replace() aren't working due to us changing how the background board and printed board works. Background board no longer includes |, so we should just need to edit some indexing values.
 #
 #
 #
@@ -37,8 +37,8 @@ def start_screen(amount = "", player = ""):
     in_a_row = set_score(rows, columns)
     amount = set_player_number(amount, rows, columns, in_a_row)
     player = player_setter(player, amount)
-    board, top_line = create_board(rows, columns, in_a_row)
-    return player, board, rows, columns, in_a_row, top_line
+    board = create_board(rows, columns, in_a_row)
+    return player, board, rows, columns, in_a_row
 
 def set_rows(rows = ""):
     rows = input("How many rows do you want to play with? (Default is 6)\n")
@@ -66,12 +66,8 @@ def set_columns(columns = ""):
 
 def set_score(rows, columns, in_a_row = ""):
     if rows > columns:
-        print(f"columns: {columns}")
-        print(f"rows: {rows}")
         max_score = rows
     else:
-        print(f"columns: {columns}")
-        print(f"rows: {rows}")
         max_score = columns
     in_a_row = input(f"What is the score to win? The maximum possible is {max_score} (Default is 4)\n") # Might need some rewording (how many spots in a row to win?)
     if in_a_row == "":
@@ -107,7 +103,7 @@ def player_setter(player, amount):
     while i < int(amount):
         temp_player = input(f"What character do you want player {len(player)+1} to be?\n")
         if temp_player == "#":
-            print("player can not be \"#\"")
+            print("player can not be '#'")
         else:
             if temp_player == "":
                 temp_player = f"{len(player)}"
@@ -122,17 +118,15 @@ def player_setter(player, amount):
             i+=1
     return player
 
-def create_board(rows = 6, columns = 7, in_a_row = 4, board = {}, string = "", top_line = ""):
+def create_board(rows = 6, columns = 7, in_a_row = 4, board = {}, string = ""):
     for i in range(columns):
         string += ("#")
-        print(string)
-        top_line += f"{i + 1}"
-    string += "\n"
-    top_line += "\n"
+        #top_line += f"{i + 1}"
+    string += ""
+    #top_line += ""
     for i in range(rows):
         board[i] = string
-        print(f"This is the board: \n{board}")
-    return board, top_line
+    return board
 
 
 #    i = 0
@@ -160,13 +154,26 @@ def create_board(rows = 6, columns = 7, in_a_row = 4, board = {}, string = "", t
 
 
 def print_board(board):
-    i = 0
-    printed_board = '\n'
-    while i < len(board):
-        print(f"pb = {printed_board}\nb = {board}\ni = {i}") #dude your code is borked
-        printed_board += board[i]
-        i+=1
+    #I think I finally understand why for loops are better!
+    top_line = "|"
+    for i in range(1,columns+1):
+        top_line += f"{i}|"
+    top_line += "\n"
+
+    printed_board = top_line
+    for i in board:
+        printed_board += "|"
+        for x in board[i]:
+            printed_board += f"{x}|"
+        printed_board += "\n"
     return printed_board
+    #i = 0
+    #printed_board = '\n'
+    #while i < len(board):
+    #    print(f"pb = {printed_board}\nb = {board}\ni = {i}") #dude your code is borked
+    #    printed_board += board[i]
+    #    i+=1
+    #return printed_board
 
 def score():
     pass
@@ -232,17 +239,17 @@ def score():
 
 def lowest_unoccupied_line(column, board):
     line = len(board)-1
-    lowest_line = 5
+    lowest_line = len(board)-1
     str_line = ""
-    while line >= 1:
-        print(f"str_line = {str_line}\nboard = {board}\nline = {line}")
+    while line >= 0:
+        #print(f"str_line = {str_line}\nboard = {board}\nline = {line}")
         str_line = board[line]
-        if str_line[column*2-1] != "#":
+        if str_line[column-1] != "#":
             line-=1
         else:
             lowest_line = line
             return lowest_line
-board
+
 def replace(line, column, board, player_number, player):
     try:
         str_line = board[line]
@@ -252,7 +259,7 @@ def replace(line, column, board, player_number, player):
     i = 0
     new_str_line = ''
     while i < len(str_line):
-        if i == column*2-1:
+        if i == column-1:
             new_str_line += player[player_number]
         else:
             new_str_line += str_line[i]
@@ -265,25 +272,25 @@ def main(player_number, player):
         player_number = 0
     print(print_board(board))
     place_col = 0
-    while place_col not in range(1,len(board)+1):
+    while place_col not in range(1,columns+1):
 #   while place_col not in (1,2,3,4,5,6,7):
         place_col = input('What column would you like to drop your piece in?\n')
         try:
             place_col = int(place_col)
-            if place_col not in range(1,len(board)+1):
+            if place_col not in range(1,columns+1):
 #           if place_col not in (1,2,3,4,5,6,7):
-                print(f"Error: '{place_col}' not in range 1-{len(board)}\n")
+                print(f"Error: '{place_col}' not in range 1-{columns}\n")
         except Exception as e:
             if place_col == "q":
                 print ("Goodbye")
                 return
             else:
-                print(f"Error: '{place_col}' not in range 1-{len(board)}\n")
+                print(f"Error: '{place_col}' not in range 1-{columns}\n")
     check = replace(lowest_unoccupied_line(place_col, board), place_col, board, player_number, player)
     if check != False:
         player_number += 1
     main(player_number, player)
 
 # Line below this has to stay outside of main() otherwise it gets called multiple times and we only want it to get called once. now i am trying to see how far this goes off the screen before it stops me. EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE it dosent stop me, it just makes the screen go over
-player, board, rows, columns, in_a_row, top_line = start_screen(amount, player)
+player, board, rows, columns, in_a_row = start_screen(amount, player)
 main(player_number, player)
