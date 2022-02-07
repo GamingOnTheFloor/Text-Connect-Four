@@ -33,6 +33,8 @@ in_a_row = 0
 
 play = True
 
+line = 0
+
 def start_screen(amount = "", player = ""):
     rows = set_rows()
     columns = set_columns()
@@ -139,9 +141,8 @@ def print_board(board):
         for x in board[i]:
             printed_board += f"{x}|"
         printed_board += "\n"
-    return printed_board
     print("check")
-    score(board, line, place_col, in_a_row, player_number, play)
+    return printed_board
 
 def score(board, line, place_col, in_a_row, player_number, play):
     print("check")
@@ -238,7 +239,7 @@ def replace(line, column, board, player_number, player):
         str_line = board[line]
     except Exception as e:
         print(f"Oops! Column {column} is already full! Pick a different column.\n")
-        return False
+        return False, False
     i = 0
     new_str_line = ''
     while i < len(str_line):
@@ -248,9 +249,9 @@ def replace(line, column, board, player_number, player):
             new_str_line += str_line[i]
         i+=1
     board[line] = new_str_line
-    return board[line]
+    return board[line], line
 
-def main(player_number, player, play):
+def main(player_number, player, play, line):
     if play == True:
         if player_number >= len(player):
             player_number = 0
@@ -270,9 +271,10 @@ def main(player_number, player, play):
                     return
                 else:
                     print(f"Error: '{place_col}' not in range 1-{columns}\n")
-        check = replace(lowest_unoccupied_line(place_col, board), place_col, board, player_number, player)
+        check, line = replace(lowest_unoccupied_line(place_col, board), place_col, board, player_number, player)
+        score(board, line, place_col, in_a_row, player_number, play)
         if check != False:
             player_number += 1
 
 player, board, rows, columns, in_a_row = start_screen(amount, player)
-main(player_number, player, play)
+main(player_number, player, play, line)
