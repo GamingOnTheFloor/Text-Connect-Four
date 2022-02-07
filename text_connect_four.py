@@ -31,6 +31,8 @@ columns = 0
 
 in_a_row = 0
 
+play = True
+
 def start_screen(amount = "", player = ""):
     rows = set_rows()
     columns = set_columns()
@@ -69,7 +71,7 @@ def set_score(rows, columns, in_a_row = ""):
         max_score = rows
     else:
         max_score = columns
-    in_a_row = input(f"What is the score to win? The maximum possible is {max_score} (Default is 4)\n") # Might need some rewording (how many spots in a row to win?)
+    in_a_row = input(f"What is the score to win? The maximum possible is {max_score}. (Default is 4)\n") # Might need some rewording (how many spots in a row to win?)
     if in_a_row == "":
         in_a_row = 4
     else:
@@ -82,9 +84,9 @@ def set_score(rows, columns, in_a_row = ""):
             print("That value is above the maximum score limit. If you wish to increase this, increase the boards columns or rows.\n")
             set_score(rows, columns)
     return in_a_row
-#        in_a_row = int(in_a_row)
+
 def set_player_number(amount, rows, columns, in_a_row):
-    amount = input(f"How many player's do you want to play with? the maximum value is {int((rows*columns)/in_a_row)}\n")
+    amount = input(f"How many player's do you want to play with? The maximum player count is {int((rows*columns)/in_a_row)}.\n")
     if amount == "":
         amount = 2
     else:
@@ -121,45 +123,16 @@ def player_setter(player, amount):
 def create_board(rows = 6, columns = 7, in_a_row = 4, board = {}, string = ""):
     for i in range(columns):
         string += ("#")
-        #top_line += f"{i + 1}"
     string += ""
-    #top_line += ""
     for i in range(rows):
         board[i] = string
     return board
 
-
-#    i = 0
-#    string = "|"
-#    string_num = "|"
-#    while i <= columns - 1:
-#        if i > 98:
-#            string += "  #|"
-#        elif i > 8:
-#            string += " #|"
-#        else:
-#            string += "#|"
-#        print(string)
-#        string_num += f"{i + 1}|"
-#        i += 1
-#    string += "\n"
-#    string_num += "\n"
-#    board[0] = string_num
-#    i = 1
-#    while i <= rows:
-#        board[i] = string
-#        print(board)
-#        i += 1
-#    return board
-
-
 def print_board(board):
-    #I think I finally understand why for loops are better!
     top_line = "|"
     for i in range(1,columns+1):
         top_line += f"{i}|"
-    top_line += "\n"
-
+    top_line += "\n\n"
     printed_board = top_line
     for i in board:
         printed_board += "|"
@@ -167,52 +140,48 @@ def print_board(board):
             printed_board += f"{x}|"
         printed_board += "\n"
     return printed_board
-    #i = 0
-    #printed_board = '\n'
-    #while i < len(board):
-    #    print(f"pb = {printed_board}\nb = {board}\ni = {i}") #dude your code is borked
-    #    printed_board += board[i]
-    #    i+=1
-    #return printed_board
+    print("check")
+    score(board, line, place_col, in_a_row, player_number, play)
 
-def score():
-    pass
-#1 rework the board to not have the | inbetween the #'s and it is just #'s
-#2 change the print board function to print the board but with |'s inbetween the #'s
-    back_score = 1 # for scoring in the \ direction
-    fore_score = 1 # for scoring in the / direction
-    lon_score = 1 # for scoring in the | direction
-    lat_score = 1 # for scoring in the - direction
-#have to learn how to index dictionaries again:
-    char = board[line]
-    temp = char[place_col]
+def score(board, line, place_col, in_a_row, player_number, play):
+    print("check")
+    back_score = 0
+    fore_score = 0
+    lon_score = 0
+    lat_score = 0
+    y = board[line]
+    xy = y[place_col]
     for i in range(4):
         if i == 0:
             direction = "back"
             chng_col = 1
             chng_row = 1
+            print("check")
         elif i == 1:
             directoon = "fore"
             chng_col = 1
             chng_row = -1
+            print("check")
         elif i == 2:
             direction = "lon"
             chng_col = 0
             chng_row = 1
+            print("check")
         elif i == 3:
             directon = "lat"
             chng_col = 1
             chng_row = 0
+            print("check")
         else:
             direction = "back"
             chng_col = 1
             chng_row = 1
         srt_chng_col = chng_col
         srt_chng_row = chng_row
-        for i in range(in_a_row):
-            while board[line+chng_row:place_col+chng_col] == temp:
-                chng_col += srt_chng_col
-                chng_row += srt_chng_row
+        for i in range(in_a_row + 1):
+            temp_y = y[line]
+            temp_xy = temp_y[place_col]
+            while temp_xy == xy:
                 if direction == back:
                     back_score += 1
                 elif direction == fore:
@@ -221,11 +190,17 @@ def score():
                     lon_score += 1
                 else:
                     lat_score += 1
+                chng_row += srt_chng_row
+                chng_col += srt_chng_col
+                temp_y = y[line + chng_row]
+                temp_xy = temp_y[place_col + chng_col]
+                print (f"back_score: {back_score}\nfore_score: {fore_score}\nlon_score: {lon_score}\nlat_score: {lat_score}")
             chng_col = srt_chng_col
             chng_row = srt_chng_row
-            while board[line-chng_row:place_col-chng_col] == temp:
-                chng_col += srt_chng_col
-                chng_row += srt_chng_row
+            temp_y = y[line + chng_row]
+            temp_xy = temp_y[place_col + chng_col]
+            print("check")
+            while temp_xy == xy:
                 if direction == back:
                     back_score += 1
                 elif direction == fore:
@@ -234,15 +209,23 @@ def score():
                     lon_score += 1
                 else:
                     lat_score += 1
+                chng_row -= srt_chng_row
+                chng_col -= srt_chng_col
+                temp_y = y[line + chng_row]
+                temp_xy = temp_y[place_col + chng_col]
+                print (f"back_score: {back_score}\nfore_score: {fore_score}\nlon_score: {lon_score}\nlat_score: {lat_score}")
+            print("check")
     if back_score >= in_a_row or fore_score >= in_a_row or lon_score >= in_a_row or lat_score >= in_a_row:
-        print (f"Player (change to winner) won!")
+        print (f"Player {player_number} won!")
+        play = False
+    print("check")
+
 
 def lowest_unoccupied_line(column, board):
     line = len(board)-1
     lowest_line = len(board)-1
     str_line = ""
     while line >= 0:
-        #print(f"str_line = {str_line}\nboard = {board}\nline = {line}")
         str_line = board[line]
         if str_line[column-1] != "#":
             line-=1
@@ -267,30 +250,29 @@ def replace(line, column, board, player_number, player):
     board[line] = new_str_line
     return board[line]
 
-def main(player_number, player):
-    if player_number >= len(player):
-        player_number = 0
-    print(print_board(board))
-    place_col = 0
-    while place_col not in range(1,columns+1):
-#   while place_col not in (1,2,3,4,5,6,7):
-        place_col = input('What column would you like to drop your piece in?\n')
-        try:
-            place_col = int(place_col)
-            if place_col not in range(1,columns+1):
-#           if place_col not in (1,2,3,4,5,6,7):
-                print(f"Error: '{place_col}' not in range 1-{columns}\n")
-        except Exception as e:
-            if place_col == "q":
-                print ("Goodbye")
-                return
-            else:
-                print(f"Error: '{place_col}' not in range 1-{columns}\n")
-    check = replace(lowest_unoccupied_line(place_col, board), place_col, board, player_number, player)
-    if check != False:
-        player_number += 1
-    main(player_number, player)
+def main(player_number, player, play):
+    if play == True:
+        if player_number >= len(player):
+            player_number = 0
+        print(f"\n\n{print_board(board)}\n")
+        place_col = 0
+        while place_col not in range(1,columns+1):
+    #   while place_col not in (1,2,3,4,5,6,7):
+            place_col = input('What column would you like to drop your piece in?\n')
+            try:
+                place_col = int(place_col)
+                if place_col not in range(1,columns+1):
+    #           if place_col not in (1,2,3,4,5,6,7):
+                    print(f"Error: '{place_col}' not in range 1-{columns}\n")
+            except Exception as e:
+                if place_col == "q":
+                    print ("Goodbye")
+                    return
+                else:
+                    print(f"Error: '{place_col}' not in range 1-{columns}\n")
+        check = replace(lowest_unoccupied_line(place_col, board), place_col, board, player_number, player)
+        if check != False:
+            player_number += 1
 
-# Line below this has to stay outside of main() otherwise it gets called multiple times and we only want it to get called once. now i am trying to see how far this goes off the screen before it stops me. EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE it dosent stop me, it just makes the screen go over
 player, board, rows, columns, in_a_row = start_screen(amount, player)
-main(player_number, player)
+main(player_number, player, play)
