@@ -45,6 +45,7 @@ def start_screen(amount = "", player = ""):
     return player, board, rows, columns, in_a_row
 
 def set_rows(rows = ""):
+    rows = ""
     rows = input("How many rows do you want to play with? (Default is 6)\n")
     if rows == "":
         rows = 6
@@ -57,6 +58,7 @@ def set_rows(rows = ""):
     return rows
 
 def set_columns(columns = ""):
+    columns = ""
     columns = input("How many columns do you want to play with? (Default is 7)\n")
     if columns == "":
         columns = 7
@@ -69,6 +71,7 @@ def set_columns(columns = ""):
     return columns
 
 def set_score(rows, columns, in_a_row = ""):
+    in_a_row = ""
     if rows > columns:
         max_score = rows
     else:
@@ -141,11 +144,11 @@ def print_board(board):
         for x in board[i]:
             printed_board += f"{x}|"
         printed_board += "\n"
-    print("check")
     return printed_board
 
 def score(board, line, place_col, in_a_row, player_number, play):
-    print("check")
+    return
+    print("check 2")
     back_score = 0
     fore_score = 0
     lon_score = 0
@@ -157,50 +160,52 @@ def score(board, line, place_col, in_a_row, player_number, play):
             direction = "back"
             chng_col = 1
             chng_row = 1
-            print("check")
+            print("check 3")
         elif i == 1:
             directoon = "fore"
             chng_col = 1
             chng_row = -1
-            print("check")
+            print("check 4")
         elif i == 2:
             direction = "lon"
             chng_col = 0
             chng_row = 1
-            print("check")
+            print("check 5")
         elif i == 3:
             directon = "lat"
             chng_col = 1
             chng_row = 0
-            print("check")
+            print("check 6")
         else:
             direction = "back"
             chng_col = 1
             chng_row = 1
+#here on is not working/ untested
         srt_chng_col = chng_col
         srt_chng_row = chng_row
         for i in range(in_a_row + 1):
-            temp_y = y[line]
+            temp_y = y
+            print(f"Y: {temp_y} \ncol: {place_col}")
             temp_xy = temp_y[place_col]
             while temp_xy == xy:
-                if direction == back:
+                if direction == "back":
                     back_score += 1
-                elif direction == fore:
+                elif direction == "fore":
                     fore_score += 1
-                elif direction == lon:
+                elif direction == "lon":
                     lon_score += 1
                 else:
                     lat_score += 1
                 chng_row += srt_chng_row
                 chng_col += srt_chng_col
-                temp_y = y[line + chng_row]
+                temp_y = board[line + chng_row - 2]
                 temp_xy = temp_y[place_col + chng_col]
                 print (f"back_score: {back_score}\nfore_score: {fore_score}\nlon_score: {lon_score}\nlat_score: {lat_score}")
             chng_col = srt_chng_col
             chng_row = srt_chng_row
-            temp_y = y[line + chng_row]
+            temp_y = board[line + chng_row]
             temp_xy = temp_y[place_col + chng_col]
-            print("check")
+            print("check 7")
             while temp_xy == xy:
                 if direction == back:
                     back_score += 1
@@ -217,9 +222,10 @@ def score(board, line, place_col, in_a_row, player_number, play):
                 print (f"back_score: {back_score}\nfore_score: {fore_score}\nlon_score: {lon_score}\nlat_score: {lat_score}")
             print("check")
     if back_score >= in_a_row or fore_score >= in_a_row or lon_score >= in_a_row or lat_score >= in_a_row:
+        print(print_board(board))
         print (f"Player {player_number} won!")
         play = False
-    print("check")
+    print("check 8")
 
 
 def lowest_unoccupied_line(column, board):
@@ -252,7 +258,7 @@ def replace(line, column, board, player_number, player):
     return board[line], line
 
 def main(player_number, player, play, line):
-    if play == True:
+    while play == True:
         if player_number >= len(player):
             player_number = 0
         print(f"\n\n{print_board(board)}\n")
