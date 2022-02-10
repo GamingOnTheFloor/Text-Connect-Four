@@ -37,15 +37,19 @@ line = 0
 
 def start_screen(amount = "", player = ""):
     rows = set_rows()
+    print(f"Rows is set to {rows}.")
     columns = set_columns()
+    print(f"Columns is set to {columns}.")
     in_a_row = set_score(rows, columns)
+    print(f"Score to win is {in_a_row}.")
     amount = set_player_number(amount, rows, columns, in_a_row)
+    print(f"You are playing with {amount} players.")
     player = player_setter(player, amount)
+    print(f"Player characters are: {player}")
     board = create_board(rows, columns, in_a_row)
     return player, board, rows, columns, in_a_row
 
 def set_rows(rows = ""):
-    rows = ""
     rows = input("How many rows do you want to play with? (Default is 6)\n")
     if rows == "":
         rows = 6
@@ -54,11 +58,10 @@ def set_rows(rows = ""):
             rows = int(rows)
         except Exception as f:
             print (f"The amount of rows '{rows}' must be a number")
-            set_rows()
+            rows = set_rows(rows)
     return rows
 
 def set_columns(columns = ""):
-    columns = ""
     columns = input("How many columns do you want to play with? (Default is 7)\n")
     if columns == "":
         columns = 7
@@ -67,11 +70,10 @@ def set_columns(columns = ""):
             columns = int(columns)
         except Exception as f:
             print (f"The amount of columns '{columns}' must be a number")
-            set_columns()
+            columns = set_columns(columns)
     return columns
 
 def set_score(rows, columns, in_a_row = ""):
-    in_a_row = ""
     if rows > columns:
         max_score = rows
     else:
@@ -83,11 +85,9 @@ def set_score(rows, columns, in_a_row = ""):
         try:
             in_a_row = int(in_a_row)
         except Exception as f:
-            print (f"The score to win '{in_a_row}' must be a number")
-            set_score(rows, columns)
+            in_a_row = set_score(rows, columns, in_a_row)
         if in_a_row > max_score:
-            print("That value is above the maximum score limit. If you wish to increase this, increase the boards columns or rows.\n")
-            set_score(rows, columns)
+            in_a_row = set_score(rows, columns, in_a_row)
     return in_a_row
 
 def set_player_number(amount, rows, columns, in_a_row):
@@ -99,10 +99,10 @@ def set_player_number(amount, rows, columns, in_a_row):
             amount = int(amount) #amount currently only gets set if the first input is a number. If it isn't, it will throw the exception and go back through the function, but won't actually set it to a number the second+ time through.
         except Exception as f:
             print (f"The amount of players '{amount}' must be a number")
-            set_player_number(amount, rows, columns, in_a_row)
+            amount = set_player_number(amount, rows, columns, in_a_row)
         if amount > ((rows*columns)/in_a_row):
             print("That many players can not possibley fit on this board")
-            set_player_number(amount, rows, columns, in_a_row)
+            amount = set_player_number(amount, rows, columns, in_a_row)
     return amount
 
 def player_setter(player, amount):
@@ -147,12 +147,13 @@ def print_board(board):
     return printed_board
 
 def score(board, line, place_col, in_a_row, player_number, play):
-    return
     print("check 2")
     back_score = 0
     fore_score = 0
     lon_score = 0
     lat_score = 0
+    place_col -= 1
+    stupid_thing = True
     y = board[line]
     xy = y[place_col]
     for i in range(4):
@@ -180,14 +181,15 @@ def score(board, line, place_col, in_a_row, player_number, play):
             direction = "back"
             chng_col = 1
             chng_row = 1
-#here on is not working/ untested
+#here on is not working
         srt_chng_col = chng_col
         srt_chng_row = chng_row
         for i in range(in_a_row + 1):
             temp_y = y
             print(f"Y: {temp_y} \ncol: {place_col}")
             temp_xy = temp_y[place_col]
-            while temp_xy == xy:
+            while stupid_thing == True:
+                print(f"\n\nxy: {xy}\ntemp_xy: {temp_xy}\n\n")
                 if direction == "back":
                     back_score += 1
                 elif direction == "fore":
@@ -198,20 +200,26 @@ def score(board, line, place_col, in_a_row, player_number, play):
                     lat_score += 1
                 chng_row += srt_chng_row
                 chng_col += srt_chng_col
-                temp_y = board[line + chng_row - 2]
+                temp_y = board[line + (-1 * chng_row)]
                 temp_xy = temp_y[place_col + chng_col]
-                print (f"back_score: {back_score}\nfore_score: {fore_score}\nlon_score: {lon_score}\nlat_score: {lat_score}")
+                if xy == temp_xy:
+                    stupid_thing = True
+                else:
+                    stupid_thing = False
+                #print (f"back_score: {back_score}\nfore_score: {fore_score}\nlon_score: {lon_score}\nlat_score: {lat_score}\ntemp_y: {temp_y}\ntemp_xy: {temp_xy}\nxy: {xy}\ny: {y}")
+#here not tested good
             chng_col = srt_chng_col
             chng_row = srt_chng_row
-            temp_y = board[line + chng_row]
+            print(line + chng_row, line, chng_row, srt_chng_row, temp_y)
+            temp_y = board[line + (-1 * chng_row)]
             temp_xy = temp_y[place_col + chng_col]
             print("check 7")
             while temp_xy == xy:
-                if direction == back:
+                if direction == "back":
                     back_score += 1
-                elif direction == fore:
+                elif direction == "fore":
                     fore_score += 1
-                elif direction == lon:
+                elif direction == "lon":
                     lon_score += 1
                 else:
                     lat_score += 1
