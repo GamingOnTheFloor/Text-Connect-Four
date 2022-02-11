@@ -37,15 +37,15 @@ line = 0
 
 def start_screen(amount = "", player = ""):
     rows = set_rows()
-    print(f"Rows is set to {rows}.")
+    print(f"Rows is set to {rows}.\n")
     columns = set_columns()
-    print(f"Columns is set to {columns}.")
+    print(f"Columns is set to {columns}.\n")
     in_a_row = set_score(rows, columns)
-    print(f"Score to win is {in_a_row}.")
+    print(f"Score to win is {in_a_row}.\n")
     amount = set_player_number(amount, rows, columns, in_a_row)
-    print(f"You are playing with {amount} players.")
+    print(f"You are playing with {amount} players.\n")
     player = player_setter(player, amount)
-    print(f"Player characters are: {player}")
+    print(f"Player characters are: {player}\n")
     board = create_board(rows, columns, in_a_row)
     return player, board, rows, columns, in_a_row
 
@@ -146,7 +146,7 @@ def print_board(board):
         printed_board += "\n"
     return printed_board
 
-def score(board, line, place_col, in_a_row, player_number, play):
+def score(board, line, place_col, in_a_row, player_number, play, rows, columns):
     print("check 2")
     back_score = 0
     fore_score = 0
@@ -163,9 +163,9 @@ def score(board, line, place_col, in_a_row, player_number, play):
             chng_row = 1
             print("check 3")
         elif i == 1:
-            directoon = "fore"
-            chng_col = 1
-            chng_row = -1
+            direction = "fore"
+            chng_col = -1
+            chng_row = 1
             print("check 4")
         elif i == 2:
             direction = "lon"
@@ -173,7 +173,7 @@ def score(board, line, place_col, in_a_row, player_number, play):
             chng_row = 1
             print("check 5")
         elif i == 3:
-            directon = "lat"
+            direction = "lat"
             chng_col = 1
             chng_row = 0
             print("check 6")
@@ -184,7 +184,7 @@ def score(board, line, place_col, in_a_row, player_number, play):
 #here on is not working
         srt_chng_col = chng_col
         srt_chng_row = chng_row
-        for i in range(in_a_row + 1):
+        for i in range(in_a_row):
             temp_y = y
             print(f"Y: {temp_y} \ncol: {place_col}")
             temp_xy = temp_y[place_col]
@@ -198,12 +198,18 @@ def score(board, line, place_col, in_a_row, player_number, play):
                     lon_score += 1
                 else:
                     lat_score += 1
+                print(stupid_thing)
                 chng_row += srt_chng_row
                 chng_col += srt_chng_col
-                temp_y = board[line + (-1 * chng_row)]
-                temp_xy = temp_y[place_col + chng_col]
-                if xy == temp_xy:
-                    stupid_thing = True
+                print(line + chng_row, line, chng_row, srt_chng_row, temp_y)
+                if line + (-1 * chng_row) > -1 and line + (-1 * chng_row) < rows - 1 and place_col + chng_col > -1 and place_col + chng_col < columns - 1:
+                    temp_y = board[line + (-1 * chng_row)]
+                    print(place_col + chng_col, place_col, chng_col)
+                    temp_xy = temp_y[place_col + chng_col]
+                    if xy == temp_xy:
+                        stupid_thing = True
+                    else:
+                        stupid_thing = False
                 else:
                     stupid_thing = False
                 #print (f"back_score: {back_score}\nfore_score: {fore_score}\nlon_score: {lon_score}\nlat_score: {lat_score}\ntemp_y: {temp_y}\ntemp_xy: {temp_xy}\nxy: {xy}\ny: {y}")
@@ -211,9 +217,10 @@ def score(board, line, place_col, in_a_row, player_number, play):
             chng_col = srt_chng_col
             chng_row = srt_chng_row
             print(line + chng_row, line, chng_row, srt_chng_row, temp_y)
-            temp_y = board[line + (-1 * chng_row)]
-            temp_xy = temp_y[place_col + chng_col]
-            print("check 7")
+            if line + (-1 * chng_row) > -1 and line + (-1 * chng_row) < rows - 1 and place_col + chng_col > -1 and place_col + chng_col < columns - 1:
+                temp_y = board[line + (-1 * chng_row)]
+                temp_xy = temp_y[place_col + chng_col]
+            print(f"check 7 {direction}")
             while temp_xy == xy:
                 if direction == "back":
                     back_score += 1
@@ -227,9 +234,10 @@ def score(board, line, place_col, in_a_row, player_number, play):
                 chng_col -= srt_chng_col
                 temp_y = y[line + chng_row]
                 temp_xy = temp_y[place_col + chng_col]
-                print (f"back_score: {back_score}\nfore_score: {fore_score}\nlon_score: {lon_score}\nlat_score: {lat_score}")
+                print (f"back_score: {back_score}\nfore_score: {fore_score}\nlon_score: {lon_score}\nlat_score: {lat_score}\n")
             print("check")
     if back_score >= in_a_row or fore_score >= in_a_row or lon_score >= in_a_row or lat_score >= in_a_row:
+#   if [back_score, fore_score, lon_score, lat_score] >= in_a_row:
         print(print_board(board))
         print (f"Player {player_number} won!")
         play = False
@@ -286,7 +294,7 @@ def main(player_number, player, play, line):
                 else:
                     print(f"Error: '{place_col}' not in range 1-{columns}\n")
         check, line = replace(lowest_unoccupied_line(place_col, board), place_col, board, player_number, player)
-        score(board, line, place_col, in_a_row, player_number, play)
+        score(board, line, place_col, in_a_row, player_number, play, rows, columns)
         if check != False:
             player_number += 1
 
