@@ -186,7 +186,7 @@ def score(board, line, place_col, in_a_row, player_number, play, rows, columns):
         srt_chng_row = chng_row
         for i in range(in_a_row):
             temp_y = y
-            print(f"Y: {temp_y} \ncol: {place_col}")
+            print(f"temp Y: {temp_y} \nplace col: {place_col}")
             temp_xy = temp_y[place_col]
             while stupid_thing == True:
                 print(f"\n\nxy: {xy}\ntemp_xy: {temp_xy}\n\n")
@@ -198,7 +198,7 @@ def score(board, line, place_col, in_a_row, player_number, play, rows, columns):
                     lon_score += 1
                 else:
                     lat_score += 1
-                print(stupid_thing)
+                print(f"stupid thing: {stupid_thing}")
                 chng_row += srt_chng_row
                 chng_col += srt_chng_col
                 print(line + chng_row, line, chng_row, srt_chng_row, temp_y)
@@ -216,11 +216,11 @@ def score(board, line, place_col, in_a_row, player_number, play, rows, columns):
 #here not tested good
             chng_col = srt_chng_col
             chng_row = srt_chng_row
-            print(line + chng_row, line, chng_row, srt_chng_row, temp_y)
+            print(f"line + chng_row: {line + chng_row}\nline: {line}\nchng_row: {chng_row}\nsrt_chng_row: {srt_chng_row}\ntemp_y: {temp_y}")
             if line + (-1 * chng_row) > -1 and line + (-1 * chng_row) < rows - 1 and place_col + chng_col > -1 and place_col + chng_col < columns - 1:
                 temp_y = board[line + (-1 * chng_row)]
                 temp_xy = temp_y[place_col + chng_col]
-            print(f"check 7 {direction}")
+            print(f"check 7\ndirection: {direction}")
             while temp_xy == xy:
                 if direction == "back":
                     back_score += 1
@@ -233,13 +233,16 @@ def score(board, line, place_col, in_a_row, player_number, play, rows, columns):
                 chng_row -= srt_chng_row
                 chng_col -= srt_chng_col
                 temp_y = y[line + chng_row]
-                temp_xy = temp_y[place_col + chng_col]
+                if place_col + chng_col > columns - 1:
+                    temp_xy = temp_y[place_col + chng_col - 1]
+                else:
+                    temp_xy = temp_y[place_col + chng_col]
                 print (f"back_score: {back_score}\nfore_score: {fore_score}\nlon_score: {lon_score}\nlat_score: {lat_score}\n")
-            print("check")
+            print("check like 11 or something but inbetween check 7 and 8")
     if back_score >= in_a_row or fore_score >= in_a_row or lon_score >= in_a_row or lat_score >= in_a_row:
 #   if [back_score, fore_score, lon_score, lat_score] >= in_a_row:
         print(print_board(board))
-        print (f"Player {player_number} won!")
+        print (f"Player {player_number + 1} won!")
         play = False
     print("check 8")
 
