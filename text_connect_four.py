@@ -1,13 +1,15 @@
-# Number of lines
 # using tabs instead of 4 spaces
 
-#check for the max score to win
+
+    #to do list:
+# check for the max score to win
 # lowest_unoccupied_line() and replace() aren't working due to us changing how the background board and printed board works. Background board no longer includes |, so we should just need to edit some indexing values.
 #
 #
 #
 #
-#
+# make an ai using weighted variables that predicts where the player is going to go next by calculating probability
+
 
 board = {0: "|1|2|3|4|5|6|7|\n",
         1: "|#|#|#|#|#|#|#|\n",
@@ -16,6 +18,7 @@ board = {0: "|1|2|3|4|5|6|7|\n",
         4: "|#|#|#|#|#|#|#|\n",
         5: "|#|#|#|#|#|#|#|\n",
         6: "|#|#|#|#|#|#|#|\n"}
+
 
 player = ""
 
@@ -34,6 +37,7 @@ in_a_row = 0
 play = True
 
 line = 0
+set
 
 def start_screen(amount = "", player = ""):
     rows = set_rows()
@@ -49,6 +53,7 @@ def start_screen(amount = "", player = ""):
     board = create_board(rows, columns, in_a_row)
     return player, board, rows, columns, in_a_row
 
+
 def set_rows(rows = ""):
     rows = input("How many rows do you want to play with? (Default is 6)\n")
     if rows == "":
@@ -57,9 +62,10 @@ def set_rows(rows = ""):
         try:
             rows = int(rows)
         except Exception as f:
-            print (f"The amount of rows '{rows}' must be a number")
+            print(f"The amount of rows '{rows}' must be a number")
             rows = set_rows(rows)
     return rows
+
 
 def set_columns(columns = ""):
     columns = input("How many columns do you want to play with? (Default is 7)\n")
@@ -69,9 +75,10 @@ def set_columns(columns = ""):
         try:
             columns = int(columns)
         except Exception as f:
-            print (f"The amount of columns '{columns}' must be a number")
+            print(f"The amount of columns '{columns}' must be a number")
             columns = set_columns(columns)
     return columns
+
 
 def set_score(rows, columns, in_a_row = ""):
     if rows > columns:
@@ -90,6 +97,7 @@ def set_score(rows, columns, in_a_row = ""):
             in_a_row = set_score(rows, columns, in_a_row)
     return in_a_row
 
+
 def set_player_number(amount, rows, columns, in_a_row):
     amount = input(f"How many player's do you want to play with? The maximum player count is {int((rows*columns)/in_a_row)}.\n")
     if amount == "":
@@ -98,12 +106,13 @@ def set_player_number(amount, rows, columns, in_a_row):
         try:
             amount = int(amount) #amount currently only gets set if the first input is a number. If it isn't, it will throw the exception and go back through the function, but won't actually set it to a number the second+ time through.
         except Exception as f:
-            print (f"The amount of players '{amount}' must be a number")
+            print(f"The amount of players '{amount}' must be a number")
             amount = set_player_number(amount, rows, columns, in_a_row)
         if amount > ((rows*columns)/in_a_row):
             print("That many players can not possibley fit on this board")
             amount = set_player_number(amount, rows, columns, in_a_row)
     return amount
+
 
 def player_setter(player, amount):
     i = 0
@@ -125,6 +134,7 @@ def player_setter(player, amount):
             i+=1
     return player
 
+
 def create_board(rows = 6, columns = 7, in_a_row = 4, board = {}, string = ""):
     for i in range(columns):
         string += ("#")
@@ -132,6 +142,7 @@ def create_board(rows = 6, columns = 7, in_a_row = 4, board = {}, string = ""):
     for i in range(rows):
         board[i] = string
     return board
+
 
 def print_board(board):
     top_line = "|"
@@ -146,6 +157,7 @@ def print_board(board):
         printed_board += "\n"
     return printed_board
 
+
 def score(board, line, place_col, in_a_row, player_number, play, rows, columns):
     print("check 2")
     back_score = 0
@@ -156,7 +168,9 @@ def score(board, line, place_col, in_a_row, player_number, play, rows, columns):
     stupid_thing = True
     y = board[line]
     xy = y[place_col]
+    #if stupid_thing = True:
     for i in range(4):
+        #if stupid_thing = True:
         if i == 0:
             direction = "back"
             chng_col = 1
@@ -212,7 +226,7 @@ def score(board, line, place_col, in_a_row, player_number, play, rows, columns):
                         stupid_thing = False
                 else:
                     stupid_thing = False
-                #print (f"back_score: {back_score}\nfore_score: {fore_score}\nlon_score: {lon_score}\nlat_score: {lat_score}\ntemp_y: {temp_y}\ntemp_xy: {temp_xy}\nxy: {xy}\ny: {y}")
+                #print(f"back_score: {back_score}\nfore_score: {fore_score}\nlon_score: {lon_score}\nlat_score: {lat_score}\ntemp_y: {temp_y}\ntemp_xy: {temp_xy}\nxy: {xy}\ny: {y}")
 #here not tested good
             chng_col = srt_chng_col
             chng_row = srt_chng_row
@@ -237,12 +251,12 @@ def score(board, line, place_col, in_a_row, player_number, play, rows, columns):
                     temp_xy = temp_y[place_col + chng_col - 1]
                 else:
                     temp_xy = temp_y[place_col + chng_col]
-                print (f"back_score: {back_score}\nfore_score: {fore_score}\nlon_score: {lon_score}\nlat_score: {lat_score}\n")
-            print("check like 11 or something but inbetween check 7 and 8")
+                print(f"back_score: {back_score}\nfore_score: {fore_score}\nlon_score: {lon_score}\nlat_score: {lat_score}")
+            print("check like 11 or something but inbetween check 7 and 8\n")
     if back_score >= in_a_row or fore_score >= in_a_row or lon_score >= in_a_row or lat_score >= in_a_row:
 #   if [back_score, fore_score, lon_score, lat_score] >= in_a_row:
         print(print_board(board))
-        print (f"Player {player_number + 1} won!")
+        print(f"Player {player_number + 1} won!")
         play = False
     print("check 8")
 
@@ -258,6 +272,7 @@ def lowest_unoccupied_line(column, board):
         else:
             lowest_line = line
             return lowest_line
+
 
 def replace(line, column, board, player_number, player):
     try:
@@ -276,6 +291,7 @@ def replace(line, column, board, player_number, player):
     board[line] = new_str_line
     return board[line], line
 
+
 def main(player_number, player, play, line):
     while play == True:
         if player_number >= len(player):
@@ -292,7 +308,7 @@ def main(player_number, player, play, line):
                     print(f"Error: '{place_col}' not in range 1-{columns}\n")
             except Exception as e:
                 if place_col == "q":
-                    print ("Goodbye")
+                    print("Goodbye")
                     return
                 else:
                     print(f"Error: '{place_col}' not in range 1-{columns}\n")
@@ -301,5 +317,9 @@ def main(player_number, player, play, line):
         if check != False:
             player_number += 1
 
+
 player, board, rows, columns, in_a_row = start_screen(amount, player)
 main(player_number, player, play, line)
+
+
+# this is the total number of lines that we have so far! (-3)
