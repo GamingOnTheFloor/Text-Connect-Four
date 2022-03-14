@@ -258,6 +258,7 @@ def score(board, line, place_col, in_a_row, player_number, play, rows, columns):
         print(print_board(board))
         print(f"Player {player_number + 1} won!")
         play = False
+        return play
     print("check 8")
 
 
@@ -313,7 +314,7 @@ def main(player_number, player, play, line):
                 else:
                     print(f"Error: '{place_col}' not in range 1-{columns}\n")
         check, line = replace(lowest_unoccupied_line(place_col, board), place_col, board, player_number, player)
-        score(board, line, place_col, in_a_row, player_number, play, rows, columns)
+        play = score(board, line, place_col, in_a_row, player_number, play, rows, columns)
         if check != False:
             player_number += 1
 
