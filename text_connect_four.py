@@ -199,6 +199,7 @@ def score(board, line, place_col, in_a_row, player_number, play, rows, columns):
         srt_chng_col = chng_col
         srt_chng_row = chng_row
         for i in range(in_a_row):
+            print(f"in a row 2: {in_a_row}, run {i}")
             temp_y = y
             print(f"temp Y: {temp_y} \nplace col: {place_col}")
             temp_xy = temp_y[place_col]
@@ -252,6 +253,7 @@ def score(board, line, place_col, in_a_row, player_number, play, rows, columns):
                 else:
                     temp_xy = temp_y[place_col + chng_col]
                 print(f"back_score: {back_score}\nfore_score: {fore_score}\nlon_score: {lon_score}\nlat_score: {lat_score}")
+            print(f"in a row 1: {in_a_row}, run {i}")
             print("check like 11 or something but inbetween check 7 and 8\n")
     if back_score >= in_a_row or fore_score >= in_a_row or lon_score >= in_a_row or lat_score >= in_a_row:
 #   if [back_score, fore_score, lon_score, lat_score] >= in_a_row:
