@@ -86,7 +86,10 @@ def set_score(rows, columns, in_a_row = ""):
         max_score = columns
     in_a_row = input(f"What is the score to win? The maximum possible is {max_score}. (Default is 4)\n") # Might need some rewording (how many spots in a row to win?)
     if in_a_row == "":
-        in_a_row = 4
+        if max_score > 4:
+            in_a_row = 4
+        else:
+            in_a_row = max_score
     else:
         try:
             in_a_row = int(in_a_row)
@@ -98,18 +101,27 @@ def set_score(rows, columns, in_a_row = ""):
 
 
 def set_player_number(amount, rows, columns, in_a_row):
-    amount = input(f"How many player's do you want to play with? The maximum player count is {int((rows*columns)/in_a_row)}.\n")
-    if amount == "":
-        amount = 2
-    else:
-        try:
-            amount = int(amount) #amount currently only gets set if the first input is a number. If it isn't, it will throw the exception and go back through the function, but won't actually set it to a number the second+ time through.
-        except Exception as f:
-            print(f"The amount of players '{amount}' must be a number")
-            amount = set_player_number(amount, rows, columns, in_a_row)
-        if amount > ((rows*columns)/in_a_row):
-            print("That many players can not possibley fit on this board")
-            amount = set_player_number(amount, rows, columns, in_a_row)
+    good = False
+    while good == False:
+        amount = input(f"How many player's do you want to play with? The maximum player count is {int((rows*columns)/in_a_row)}.\n")
+        if amount == "":
+            if int((rows*columns)/in_a_row) > 2:
+                amount = 2
+            else:
+                amount = int((rows*columns)/in_a_row)
+        elif amount == 0:
+            print("There must be at least one player.")
+            good = False
+        else:
+            try:
+                amount = int(amount) #amount currently only gets set if the first input is a number. If it isn't, it will throw the exception and go back through the function, but won't actually set it to a number the second+ time through.
+                good = True
+            except Exception as f:
+                print(f"The amount of players '{amount}' must be a number")
+                amount = set_player_number(amount, rows, columns, in_a_row)
+            if amount > ((rows*columns)/in_a_row):
+                print("That many players can not possibley fit on this board")
+                amount = set_player_number(amount, rows, columns, in_a_row)
     return amount
 
 
