@@ -160,10 +160,10 @@ def print_board(board):
 
 def score(board, line, place_col, in_a_row, player_number, play, rows, columns):
     print("check 2")
-    back_score = 0
-    fore_score = 0
-    lon_score = 0
-    lat_score = 0
+    back_score = -1
+    fore_score = -1
+    lon_score = -1
+    lat_score = -1
     place_col -= 1
     stupid_thing = True
     y = board[line]
@@ -172,97 +172,113 @@ def score(board, line, place_col, in_a_row, player_number, play, rows, columns):
     for i in range(4):
         #if stupid_thing = True:
         if i == 0:
-            direction = "back"
-            chng_col = 1
-            chng_row = 1
+            direction = "back" # IS DOWN-RIGHT
+            srt_chng_col = 1
+            srt_chng_row = 1
             print("check 3")
         elif i == 1:
-            direction = "fore"
-            chng_col = -1
-            chng_row = 1
+            direction = "fore" # IS DOWN-LEFT
+            srt_chng_col = -1
+            srt_chng_row = 1
             print("check 4")
         elif i == 2:
-            direction = "lon"
-            chng_col = 0
-            chng_row = 1
+            direction = "lon" # IS DOWN
+            srt_chng_col = 0
+            srt_chng_row = 1
             print("check 5")
         elif i == 3:
-            direction = "lat"
-            chng_col = 1
-            chng_row = 0
+            direction = "lat" # IS RIGHT
+            srt_chng_col = 1
+            srt_chng_row = 0
             print("check 6")
         else:
             direction = "back"
-            chng_col = 1
-            chng_row = 1
+            srt_chng_col = 1
+            srt_chng_row = 1
 #here on is not working
-        srt_chng_col = chng_col
-        srt_chng_row = chng_row
-        for i in range(in_a_row):
-            print(f"in a row 2: {in_a_row}, run {i}")
-            temp_y = y
-            print(f"temp Y: {temp_y} \nplace col: {place_col}")
-            temp_xy = temp_y[place_col]
-            while stupid_thing == True:
-                print(f"\n\nxy: {xy}\ntemp_xy: {temp_xy}\n\n")
-                if direction == "back":
-                    back_score += 1
-                elif direction == "fore":
-                    fore_score += 1
-                elif direction == "lon":
-                    lon_score += 1
-                else:
-                    lat_score += 1
-                print(f"stupid thing: {stupid_thing}")
-                chng_row += srt_chng_row
-                chng_col += srt_chng_col
-                print(line + chng_row, line, chng_row, srt_chng_row, temp_y)
-                if line + (-1 * chng_row) > -1 and line + (-1 * chng_row) < rows - 1 and place_col + chng_col > -1 and place_col + chng_col < columns - 1:
-                    temp_y = board[line + (-1 * chng_row)]
-                    print(place_col + chng_col, place_col, chng_col)
-                    temp_xy = temp_y[place_col + chng_col]
-                    if xy == temp_xy:
-                        stupid_thing = True
-                    else:
-                        stupid_thing = False
+        stupid_thing = True
+        chng_row, chng_col = 0, 0
+        #for i in range(in_a_row):
+        print(f"in a row 2: {in_a_row}, run {i + 1}")
+        temp_y = y
+        print(f"temp Y: {temp_y} \nplace col: {place_col}")
+        temp_xy = temp_y[place_col]
+        chng_row, chng_col = 0, 0
+        while stupid_thing == True:
+            print(f"\n\nfirst\nxy: {xy}\ntemp_xy: {temp_xy}\n\n")
+            if direction == "back":
+                back_score += 1
+            elif direction == "fore":
+                fore_score += 1
+            elif direction == "lon":
+                lon_score += 1
+            else:
+                lat_score += 1
+            print(f"\n\nback_score: {back_score}\nfore_score: {fore_score}\nlon_score: {lon_score}\nlat_score: {lat_score}\n\n")
+            print(f"stupid thing: {stupid_thing}")
+            chng_row += srt_chng_row
+            chng_col += srt_chng_col
+            print(f"{line + chng_row} {line} {chng_row} {srt_chng_row}  {temp_y}")
+            try:
+            #if line + (-1 * chng_row) > -1 and line + (-1 * chng_row) < rows - 1 and place_col + chng_col > -1 and place_col + chng_col < columns - 1:
+                temp_y = board[line + chng_row]
+                print(f"Temp_y = {temp_y}")
+                temp_xy = temp_y[place_col + chng_col]
+                print(f"\n\nsecond\nxy: {xy}\ntemp_xy: {temp_xy}\n\n")
+                if xy == temp_xy:
+                    stupid_thing = True
                 else:
                     stupid_thing = False
-                #print(f"back_score: {back_score}\nfore_score: {fore_score}\nlon_score: {lon_score}\nlat_score: {lat_score}\ntemp_y: {temp_y}\ntemp_xy: {temp_xy}\nxy: {xy}\ny: {y}")
+            #else:
+            #    stupid_thing = False
+            except Exception as e:
+                print("\n\n\nOOB\n\n\n")
+                break
+            #print(f"back_score: {back_score}\nfore_score: {fore_score}\nlon_score: {lon_score}\nlat_score: {lat_score}\ntemp_y: {temp_y}\ntemp_xy: {temp_xy}\nxy: {xy}\ny: {y}")
 #here not tested good
-            chng_col = srt_chng_col
-            chng_row = srt_chng_row
-            print(f"line + chng_row: {line + chng_row}\nline: {line}\nchng_row: {chng_row}\nsrt_chng_row: {srt_chng_row}\ntemp_y: {temp_y}")
-            if line + (-1 * chng_row) > -1 and line + (-1 * chng_row) < rows - 1 and place_col + chng_col > -1 and place_col + chng_col < columns - 1:
-                temp_y = board[line + (-1 * chng_row)]
+#1 tab in
+        temp_y = y
+        print(f"temp Y: {temp_y} \nplace col: {place_col}")
+        temp_xy = temp_y[place_col]
+        chng_row, chng_col = 0, 0
+        stupid_thing = True
+        while stupid_thing == True:
+            print(f"\n\nfirst\nxy: {xy}\ntemp_xy: {temp_xy}\n\n")
+            if direction == "back":
+                back_score += 1
+            elif direction == "fore":
+                fore_score += 1
+            elif direction == "lon":
+                lon_score += 1
+            else:
+                lat_score += 1
+            print(f"\n\nback_score: {back_score}\nfore_score: {fore_score}\nlon_score: {lon_score}\nlat_score: {lat_score}\n\n")
+            print(f"stupid thing: {stupid_thing}")
+            chng_row -= srt_chng_row
+            chng_col -= srt_chng_col
+            print(f"{line + chng_row} {line} {chng_row} {srt_chng_row}  {temp_y}")
+            try:
+            #if line + (-1 * chng_row) > -1 and line + (-1 * chng_row) < rows - 1 and place_col + chng_col > -1 and place_col + chng_col < columns - 1:
+                temp_y = board[line + chng_row]
+                print(f"Temp_y = {temp_y}")
                 temp_xy = temp_y[place_col + chng_col]
-            print(f"check 7\ndirection: {direction}")
-            while temp_xy == xy:
-                if direction == "back":
-                    back_score += 1
-                elif direction == "fore":
-                    fore_score += 1
-                elif direction == "lon":
-                    lon_score += 1
+                print(f"\n\nsecond\nxy: {xy}\ntemp_xy: {temp_xy}\n\n")
+                if xy == temp_xy:
+                    stupid_thing = True
                 else:
-                    lat_score += 1
-                chng_row -= srt_chng_row
-                chng_col -= srt_chng_col
-                temp_y = y[line + chng_row]
-                if place_col + chng_col > columns - 1:
-                    temp_xy = temp_y[place_col + chng_col - 1]
-                else:
-                    temp_xy = temp_y[place_col + chng_col]
-                print(f"back_score: {back_score}\nfore_score: {fore_score}\nlon_score: {lon_score}\nlat_score: {lat_score}")
-            print(f"in a row 1: {in_a_row}, run {i}")
-            print("check like 11 or something but inbetween check 7 and 8\n")
+                    stupid_thing = False
+            #else:
+            #    stupid_thing = False
+            except Exception as e:
+                print("\n\n\nOOB\n\n\n")
+                break
     if back_score >= in_a_row or fore_score >= in_a_row or lon_score >= in_a_row or lat_score >= in_a_row:
 #   if [back_score, fore_score, lon_score, lat_score] >= in_a_row:
         print(print_board(board))
         print(f"Player {player_number + 1} won!")
         play = False
-        return play
     print("check 8")
-
+    return play
 
 def lowest_unoccupied_line(column, board):
     line = len(board)-1
