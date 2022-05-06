@@ -36,7 +36,7 @@ in_a_row = 0
 
 play = True
 
-line = None
+line = 0
 
 def start_screen(amount = "", player = ""):
     rows = set_rows()
@@ -296,7 +296,10 @@ def main(player_number, player, play, line):
     while play == True:
         if player_number >= len(player):
             player_number = 0
-        if line != False:
+        try:
+            if check != False:
+                print(f"\n\n{print_board(board)}\n")
+        except Exception as e:
             print(f"\n\n{print_board(board)}\n")
         place_col = 0
         while place_col not in range(1,columns+1):
