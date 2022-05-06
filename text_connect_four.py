@@ -36,8 +36,7 @@ in_a_row = 0
 
 play = True
 
-line = 0
-set
+line = None
 
 def start_screen(amount = "", player = ""):
     rows = set_rows()
@@ -119,7 +118,7 @@ def player_setter(player, amount):
     while i < int(amount):
         temp_player = input(f"What character do you want player {len(player)+1} to be?\n")
         if temp_player == "#":
-            print("player can not be '#'")
+            print("Player can not be '#'")
         else:
             if temp_player == "":
                 temp_player = f"{len(player)}"
@@ -159,7 +158,6 @@ def print_board(board):
 
 
 def score(board, line, place_col, in_a_row, player_number, play, rows, columns):
-    print("check 2")
     back_score = -1
     fore_score = -1
     lon_score = -1
@@ -175,22 +173,18 @@ def score(board, line, place_col, in_a_row, player_number, play, rows, columns):
             direction = "back" # IS DOWN-RIGHT
             srt_chng_col = 1
             srt_chng_row = 1
-            print("check 3")
         elif i == 1:
             direction = "fore" # IS DOWN-LEFT
             srt_chng_col = -1
             srt_chng_row = 1
-            print("check 4")
         elif i == 2:
             direction = "lon" # IS DOWN
             srt_chng_col = 0
             srt_chng_row = 1
-            print("check 5")
         elif i == 3:
             direction = "lat" # IS RIGHT
             srt_chng_col = 1
             srt_chng_row = 0
-            print("check 6")
         else:
             direction = "back"
             srt_chng_col = 1
@@ -199,13 +193,10 @@ def score(board, line, place_col, in_a_row, player_number, play, rows, columns):
         stupid_thing = True
         chng_row, chng_col = 0, 0
         #for i in range(in_a_row):
-        print(f"in a row 2: {in_a_row}, run {i + 1}")
         temp_y = y
-        print(f"temp Y: {temp_y} \nplace col: {place_col}")
         temp_xy = temp_y[place_col]
         chng_row, chng_col = 0, 0
         while stupid_thing == True:
-            print(f"\n\nfirst\nxy: {xy}\ntemp_xy: {temp_xy}\n\n")
             if direction == "back":
                 back_score += 1
             elif direction == "fore":
@@ -214,17 +205,14 @@ def score(board, line, place_col, in_a_row, player_number, play, rows, columns):
                 lon_score += 1
             else:
                 lat_score += 1
-            print(f"\n\nback_score: {back_score}\nfore_score: {fore_score}\nlon_score: {lon_score}\nlat_score: {lat_score}\n\n")
-            print(f"stupid thing: {stupid_thing}")
             chng_row += srt_chng_row
             chng_col += srt_chng_col
-            print(f"{line + chng_row} {line} {chng_row} {srt_chng_row}  {temp_y}")
             try:
+                if (place_col + chng_col) < 0:
+                    break
             #if line + (-1 * chng_row) > -1 and line + (-1 * chng_row) < rows - 1 and place_col + chng_col > -1 and place_col + chng_col < columns - 1:
                 temp_y = board[line + chng_row]
-                print(f"Temp_y = {temp_y}")
                 temp_xy = temp_y[place_col + chng_col]
-                print(f"\n\nsecond\nxy: {xy}\ntemp_xy: {temp_xy}\n\n")
                 if xy == temp_xy:
                     stupid_thing = True
                 else:
@@ -232,18 +220,15 @@ def score(board, line, place_col, in_a_row, player_number, play, rows, columns):
             #else:
             #    stupid_thing = False
             except Exception as e:
-                print("\n\n\nOOB\n\n\n")
                 break
             #print(f"back_score: {back_score}\nfore_score: {fore_score}\nlon_score: {lon_score}\nlat_score: {lat_score}\ntemp_y: {temp_y}\ntemp_xy: {temp_xy}\nxy: {xy}\ny: {y}")
 #here not tested good
 #1 tab in
         temp_y = y
-        print(f"temp Y: {temp_y} \nplace col: {place_col}")
         temp_xy = temp_y[place_col]
         chng_row, chng_col = 0, 0
         stupid_thing = True
         while stupid_thing == True:
-            print(f"\n\nfirst\nxy: {xy}\ntemp_xy: {temp_xy}\n\n")
             if direction == "back":
                 back_score += 1
             elif direction == "fore":
@@ -252,17 +237,14 @@ def score(board, line, place_col, in_a_row, player_number, play, rows, columns):
                 lon_score += 1
             else:
                 lat_score += 1
-            print(f"\n\nback_score: {back_score}\nfore_score: {fore_score}\nlon_score: {lon_score}\nlat_score: {lat_score}\n\n")
-            print(f"stupid thing: {stupid_thing}")
             chng_row -= srt_chng_row
             chng_col -= srt_chng_col
-            print(f"{line + chng_row} {line} {chng_row} {srt_chng_row}  {temp_y}")
             try:
+                if (place_col + chng_col) < 0:
+                    break
             #if line + (-1 * chng_row) > -1 and line + (-1 * chng_row) < rows - 1 and place_col + chng_col > -1 and place_col + chng_col < columns - 1:
                 temp_y = board[line + chng_row]
-                print(f"Temp_y = {temp_y}")
                 temp_xy = temp_y[place_col + chng_col]
-                print(f"\n\nsecond\nxy: {xy}\ntemp_xy: {temp_xy}\n\n")
                 if xy == temp_xy:
                     stupid_thing = True
                 else:
@@ -270,14 +252,13 @@ def score(board, line, place_col, in_a_row, player_number, play, rows, columns):
             #else:
             #    stupid_thing = False
             except Exception as e:
-                print("\n\n\nOOB\n\n\n")
                 break
     if back_score >= in_a_row or fore_score >= in_a_row or lon_score >= in_a_row or lat_score >= in_a_row:
 #   if [back_score, fore_score, lon_score, lat_score] >= in_a_row:
+        print("\n\n")
         print(print_board(board))
-        print(f"Player {player_number + 1} won!")
+        print(f"\nPlayer {player_number + 1} won!")
         play = False
-    print("check 8")
     return play
 
 def lowest_unoccupied_line(column, board):
@@ -315,11 +296,12 @@ def main(player_number, player, play, line):
     while play == True:
         if player_number >= len(player):
             player_number = 0
-        print(f"\n\n{print_board(board)}\n")
+        if line != False:
+            print(f"\n\n{print_board(board)}\n")
         place_col = 0
         while place_col not in range(1,columns+1):
     #   while place_col not in (1,2,3,4,5,6,7):
-            place_col = input('What column would you like to drop your piece in?\n')
+            place_col = input(f"What column would player {player_number + 1} ({player[player_number]}) like to drop your piece in?\n")
             try:
                 place_col = int(place_col)
                 if place_col not in range(1,columns+1):
