@@ -38,6 +38,8 @@ play = True
 
 line = 0
 
+round = 0
+
 def start_screen(amount = "", player = ""):
     rows = set_rows()
     print(f"Rows is set to {rows}.\n")
@@ -271,6 +273,11 @@ def score(board, line, place_col, in_a_row, player_number, play, rows, columns):
         print(print_board(board))
         print(f"\nPlayer {player_number + 1} won!")
         play = False
+    if round == columns * rows:
+        print("\n\n")
+        print(print_board(board))
+        print(f"\nThe board is full, no one won.")
+        play = False
     return play
 
 def lowest_unoccupied_line(column, board):
@@ -332,6 +339,7 @@ def main(player_number, player, play, line):
         play = score(board, line, place_col, in_a_row, player_number, play, rows, columns)
         if check != False:
             player_number += 1
+            roiund += 1
 
 
 player, board, rows, columns, in_a_row = start_screen(amount, player)
