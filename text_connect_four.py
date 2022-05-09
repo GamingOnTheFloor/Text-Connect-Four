@@ -339,7 +339,7 @@ def main(player_number, player, play, line):
         play = score(board, line, place_col, in_a_row, player_number, play, rows, columns)
         if check != False:
             player_number += 1
-            roiund += 1
+            round += 1
 
 
 player, board, rows, columns, in_a_row = start_screen(amount, player)
