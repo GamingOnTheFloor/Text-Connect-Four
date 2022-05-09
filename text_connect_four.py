@@ -40,6 +40,10 @@ line = 0
 
 round = 0
 
+AIc = -1
+
+AIp = ""
+
 def start_screen(amount = "", player = ""):
     rows = set_rows()
     print(f"Rows is set to {rows}.\n")
@@ -51,8 +55,24 @@ def start_screen(amount = "", player = ""):
     print(f"You are playing with {amount} players.\n")
     player = player_setter(player, amount)
     print(f"Player characters are: {player}\n")
+    AIc = -1
+    AIp = ""
+    while AIc < 0 or AIc > int((rows * columns) / in_a_row):
+        AIc = int(input(f"How many AI players do you want? There is a maximum of {int(((rows * columns) / in_a_row) - amount)}.\n"))
+        if AIc == "":
+            if amount == 0:
+                AIc = 2
+            elif amount == 1:
+                AIc = 1
+            else:
+                AIc = 0
+        if AIc < 0:
+            print("The number of AI players cant be negative.")
+        elif (AIc > int((rows * columns) / in_a_row)):
+            print("You cant have that many AI players.")
+    AIp = AI_setter(AIp, AIc)
     board = create_board(rows, columns, in_a_row)
-    return player, board, rows, columns, in_a_row
+    return player, board, rows, columns, in_a_row, AIc, AIp
 
 
 def set_rows(rows = ""):
@@ -107,10 +127,12 @@ def set_player_number(amount, rows, columns, in_a_row):
     while good == False:
         amount = input(f"How many player's do you want to play with? The maximum player count is {int((rows*columns)/in_a_row)}.\n")
         if amount == "":
-            if int((rows*columns)/in_a_row) > 2:
+            if int((rows * columns) / in_a_row) > 2:
                 amount = 2
+                good = True
             else:
-                amount = int((rows*columns)/in_a_row)
+                amount = int((rows * columns) / in_a_row)
+                good = True
         elif amount == 0:
             print("There must be at least one player.")
             good = False
@@ -121,16 +143,15 @@ def set_player_number(amount, rows, columns, in_a_row):
             except Exception as f:
                 print(f"The amount of players '{amount}' must be a number")
                 amount = set_player_number(amount, rows, columns, in_a_row)
-            if amount > ((rows*columns)/in_a_row):
+            if amount > ((rows * columns) / in_a_row):
                 print("That many players can not possibley fit on this board")
                 amount = set_player_number(amount, rows, columns, in_a_row)
     return amount
 
 
 def player_setter(player, amount):
-    i = 0
-    while i < int(amount):
-        temp_player = input(f"What character do you want player {len(player)+1} to be?\n")
+    for i in range(amount):
+        temp_player = input(f"What character do you want player {len(player) + 1} to be?\n")
         if temp_player == "#":
             print("Player can not be '#'")
         else:
@@ -139,14 +160,26 @@ def player_setter(player, amount):
             while len(temp_player) > 1 or temp_player in player:
                 if len(temp_player) > 1:
                     print("Sorry, you can only set one character to your player.")
-                    temp_player = input(f"What character do you want player {len(player)+1} to be?\n")
+                    temp_player = input(f"What character do you want player {len(player) + 1} to be?\n")
                 if temp_player in player:
                     print(f"Sorry, '{temp_player}' is already a used character by another player.")
-                    temp_player = input(f"What character do you want player {len(player)+1} to be?\n")
+                    temp_player = input(f"What character do you want player {len(player) + 1} to be?\n")
             player += temp_player
-            i+=1
+            i += 1
     return player
 
+def AI_setter(AIp, AIc):
+    total_chars = "`1234567890-=qwertyuiop[]asdfghjkl;'zxcvbnm,./~!@$%^&*()_+QWERTYUIOP{}ASDFGHJKL:ZXCVBNM<>?"
+    for i in range(AIc):
+        try_name = 0
+        for j in range(len(total_chars)):
+            if total_chars[j] in AIp or total_chars[j] in player:
+                try_name += 1
+            else:
+                AIp += total_chars[j]
+                break
+    print(f"\nAI characters are: {AIp}\n")
+    return AIp
 
 def create_board(rows = 6, columns = 7, in_a_row = 4, board = {}, string = ""):
     for i in range(columns):
@@ -287,7 +320,7 @@ def lowest_unoccupied_line(column, board):
     while line >= 0:
         str_line = board[line]
         if str_line[column-1] != "#":
-            line-=1
+            line -= 1
         else:
             lowest_line = line
             return lowest_line
@@ -306,7 +339,7 @@ def replace(line, column, board, player_number, player):
             new_str_line += player[player_number]
         else:
             new_str_line += str_line[i]
-        i+=1
+        i += 1
     board[line] = new_str_line
     return board[line], line
 
@@ -342,7 +375,7 @@ def main(player_number, player, play, line):
             round += 1
 
 
-player, board, rows, columns, in_a_row = start_screen(amount, player)
+player, board, rows, columns, in_a_row, AIc, AIp = start_screen(amount, player)
 main(player_number, player, play, line)
 
 
