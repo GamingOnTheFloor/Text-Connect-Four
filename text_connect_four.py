@@ -1,4 +1,7 @@
 import time
+import random
+from random import seed
+from random import randint
 
 # using tabs instead of 4 spaces
 
@@ -164,7 +167,7 @@ def create_board(rows = 6, columns = 7, in_a_row = 4, board = {}, string = ""):
         board[i] = string
     return board
 
-def print_board(board):
+def print_board(board, columns):
     top_line = "|"
     for i in range(1,columns+1):
         top_line += f"{i}|"
@@ -177,7 +180,7 @@ def print_board(board):
         printed_board += "\n"
     return printed_board
 
-def score(board, line, place_col, in_a_row, player_number, play, rows, columns):
+def score(board, line, place_col, in_a_row, player_number, play, rows, columns, round):
     back_score = -1
     fore_score = -1
     lon_score = -1
@@ -262,12 +265,12 @@ def score(board, line, place_col, in_a_row, player_number, play, rows, columns):
                 break
     if back_score >= in_a_row or fore_score >= in_a_row or lon_score >= in_a_row or lat_score >= in_a_row:
         print("\n\n")
-        print(print_board(board))
+        print(print_board(board, columns))
         print(f"\nPlayer {player_number + 1} won!")
         play = False
     if round == columns * rows:
         print("\n\n")
-        print(print_board(board))
+        print(print_board(board, columns))
         print(f"\nThe board is full, no one won.")
         play = False
     return play
@@ -301,15 +304,15 @@ def replace(line, column, board, player_number, player):
     board[line] = new_str_line
     return board[line], line
 
-def main(player_number, player, play, line, board, rows, columns, in_a_row, AIc, AIp):
+def main(player_number, player, play, line, board, rows, columns, in_a_row, AIc, AIp, round):
     player, board, rows, columns, in_a_row, AIc, AIp = start_screen(amount, player)
     while play == True:
         for i in range(len(player)):
             try:
                 if check != False:
-                    print(f"\n\n{print_board(board)}\n")
+                    print(f"\n\n{print_board(board, columns)}\n")
             except Exception as e:
-                print(f"\n\n{print_board(board)}\n")
+                print(f"\n\n{print_board(board, columns)}\n")
             place_col = 0
             while place_col not in range(1,columns+1):
                 place_col = input(f"What column would player {player_number + 1} ({player[player_number]}) like to drop your piece in?\n")
@@ -324,14 +327,16 @@ def main(player_number, player, play, line, board, rows, columns, in_a_row, AIc,
                     else:
                         print(f"Error: '{place_col}' not in range 1-{columns}\n")
             check, line = replace(lowest_unoccupied_line(place_col, board), place_col, board, player_number, player)
-            play = score(board, line, place_col, in_a_row, player_number, play, rows, columns)
+            play = score(board, line, place_col, in_a_row, player_number, play, rows, columns, round)
             if check != False:
                 player_number += 1
                 if player_number >= len(player):
                     player_number = 0
                 round += 1
-        for i in AIc:
-
+        for i in range(AIc):
+            wait = 1 + (0.25 * randint(-1,1))
+            time.sleep(wait) #this is to make the bot feel more human, and to make it less frusturating when you are playing 1 on 1 and the bot goes instantly.
+            
             pass
 
-main(player_number, player, play, line, board, rows, columns, in_a_row, AIc, AIp)
+main(player_number, player, play, line, board, rows, columns, in_a_row, AIc, AIp, round)
