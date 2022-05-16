@@ -40,8 +40,11 @@ def start_screen(amount = "", player = ""):
     print(f"Player characters are: {player}\n")
     AIc = -1
     AIp = ""
-    while AIc < 0 or AIc > int((rows * columns) / in_a_row):
-        AIc = int(input(f"How many AI players do you want? There is a maximum of {int(((rows * columns) / in_a_row) - amount)}.\n"))
+    max = int(((rows * columns) / in_a_row) - amount)
+    if max > 92:
+        max = 92
+    while AIc < 0 or AIc > max:
+        AIc = int(input(f"How many AI players do you want? There is a maximum of {max}.\n"))
         if AIc == "":
             if amount == 0:
                 AIc = 2
@@ -51,7 +54,7 @@ def start_screen(amount = "", player = ""):
                 AIc = 0
         if AIc < 0:
             print("The number of AI players cant be negative.")
-        elif (AIc > int((rows * columns) / in_a_row)):
+        elif (AIc > max):
             print("You cant have that many AI players.")
     AIp = AI_setter(AIp, AIc)
     board = create_board(rows, columns, in_a_row)
@@ -104,7 +107,10 @@ def set_score(rows, columns, in_a_row = ""):
 def set_player_number(amount, rows, columns, in_a_row):
     good = False
     while good == False:
-        amount = input(f"How many player's do you want to play with? The maximum player count is {int((rows*columns)/in_a_row)}.\n")
+        max = int((rows*columns)/in_a_row)
+        if max > 92:
+            max = 92
+        amount = input(f"How many player's do you want to play with? The maximum player count is {max}.\n")
         if amount == "":
             if int((rows * columns) / in_a_row) > 2:
                 amount = 2
@@ -119,6 +125,9 @@ def set_player_number(amount, rows, columns, in_a_row):
             try:
                 amount = int(amount)
                 good = True
+                if amount > max:
+                    print(f"You can't have more than {max} players.")
+                    good = False
             except Exception as f:
                 print(f"The amount of players '{amount}' must be a number")
                 amount = set_player_number(amount, rows, columns, in_a_row)
@@ -176,7 +185,11 @@ def print_board(board, columns):
     for i in board:
         printed_board += "|"
         for x in board[i]:
-            printed_board += f"{x}|"
+            printed_board += f"{x}"
+            length = int(len(str(int(x) + 1)))
+            for y in range(length - 1):
+                printed_board += " "
+            printed_board += "|"
         printed_board += "\n"
     return printed_board
 
@@ -306,6 +319,7 @@ def replace(line, column, board, player_number, player):
 
 def main(player_number, player, play, line, board, rows, columns, in_a_row, AIc, AIp, round):
     player, board, rows, columns, in_a_row, AIc, AIp = start_screen(amount, player)
+    play = True
     while play == True:
         for i in range(len(player)):
             try:
@@ -334,9 +348,8 @@ def main(player_number, player, play, line, board, rows, columns, in_a_row, AIc,
                     player_number = 0
                 round += 1
         for i in range(AIc):
-            wait = 1 + (0.25 * randint(-1,1))
+            wait = 1 + (0.25 * randint(-1,2))
             time.sleep(wait) #this is to make the bot feel more human, and to make it less frusturating when you are playing 1 on 1 and the bot goes instantly.
-            
-            pass
+            print(f"{randint(columns)}")
 
 main(player_number, player, play, line, board, rows, columns, in_a_row, AIc, AIp, round)
