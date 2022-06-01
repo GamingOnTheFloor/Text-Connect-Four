@@ -1,7 +1,7 @@
 import time
 import random
-from random import seed
-from random import randint
+import math
+from random import seed, randint
 
 # using tabs instead of 4 spaces
 
@@ -41,8 +41,8 @@ def start_screen(amount = "", player = ""):
     AIc = -1
     AIp = ""
     max = int(((rows * columns) / in_a_row) - amount)
-    if max > 92:
-        max = 92
+    if max > len("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz()[]{}<>-~=+_,.;!?:/\\@$%&^*'`\""):
+        max = len("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz()[]{}<>-~=+_,.;!?:/\\@$%&^*'`\"")
     while AIc < 0 or AIc > max:
         AIc = int(input(f"How many AI players do you want? There is a maximum of {max}.\n"))
         if AIc == "":
@@ -108,8 +108,8 @@ def set_player_number(amount, rows, columns, in_a_row):
     good = False
     while good == False:
         max = int((rows*columns)/in_a_row)
-        if max > 92:
-            max = 92
+        if max > len("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz()[]{}<>-~=+_,.;!?:/\\@$%&^*'`\""):
+            max = len("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz()[]{}<>-~=+_,.;!?:/\\@$%&^*'`\"")
         amount = input(f"How many player's do you want to play with? The maximum player count is {max}.\n")
         if amount == "":
             if int((rows * columns) / in_a_row) > 2:
@@ -184,13 +184,17 @@ def print_board(board, columns):
     printed_board = top_line
     for i in board:
         printed_board += "|"
-        for x in board[i]:
+        for x in range(columns):
+            print(f"X1: {x}")
             printed_board += f"{x}"
-            length = int(len(str(int(x) + 1)))
+            int(x)
+            print(f"X2: {x}")
+            length = int(math.log10(x)) + 1
             for y in range(length - 1):
                 printed_board += " "
             printed_board += "|"
         printed_board += "\n"
+        print(printed_board)
     return printed_board
 
 def score(board, line, place_col, in_a_row, player_number, play, rows, columns, round):

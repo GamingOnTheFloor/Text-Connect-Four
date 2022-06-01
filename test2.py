@@ -1,3 +1,4 @@
-for x in range(101):
-    length = int(len(f"{x + 1}"))
-    print(f"{length - 1}")
+import math
+x = int(input("number\n"))
+length = int(math.log10(x)) + 1
+print(length)
