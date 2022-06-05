@@ -26,8 +26,9 @@ line = 0
 round = 0
 AIc = -1
 AIp = ""
+all_chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz()[]{}<>-~=+_,.;!?:/\\@$%&^*'`\""
 
-def start_screen(amount = "", player = ""):
+def start_screen(amount = "", player = "", all_chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz()[]{}<>-~=+_,.;!?:/\\@$%&^*'`\""):
     rows = set_rows()
     print(f"Rows is set to {rows}.\n")
     columns = set_columns()
@@ -41,8 +42,8 @@ def start_screen(amount = "", player = ""):
     AIc = -1
     AIp = ""
     max = int(((rows * columns) / in_a_row) - amount)
-    if max > len("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz()[]{}<>-~=+_,.;!?:/\\@$%&^*'`\""):
-        max = len("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz()[]{}<>-~=+_,.;!?:/\\@$%&^*'`\"")
+    if max > len(all_chars):
+        max = len(all_chars)
     while AIc < 0 or AIc > max:
         AIc = int(input(f"How many AI players do you want? There is a maximum of {max}.\n"))
         if AIc == "":
@@ -56,7 +57,7 @@ def start_screen(amount = "", player = ""):
             print("The number of AI players cant be negative.")
         elif (AIc > max):
             print("You cant have that many AI players.")
-    AIp = AI_setter(AIp, AIc)
+    AIp = AI_setter(AIp, AIc, player, all_chars)
     board = create_board(rows, columns, in_a_row)
     return player, board, rows, columns, in_a_row, AIc, AIp
 
@@ -155,15 +156,14 @@ def player_setter(player, amount):
             i += 1
     return player
 
-def AI_setter(AIp, AIc):
-    total_chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz()[]{}<>-~=+_,.;!?:/\\@$%&^*'`\""
+def AI_setter(AIp, AIc, player, all_chars):
     for i in range(AIc):
         try_name = 0
-        for j in range(len(total_chars)):
-            if total_chars[j] in AIp or total_chars[j] in player:
+        for j in range(len(all_chars)):
+            if all_chars[j] in AIp or all_chars[j] in player:
                 try_name += 1
             else:
-                AIp += total_chars[j]
+                AIp += all_chars[j]
                 break
     print(f"\nAI characters are: {AIp}\n")
     return AIp
@@ -189,12 +189,13 @@ def print_board(board, columns):
             printed_board += f"{x}"
             int(x)
             print(f"X2: {x}")
-            length = int(math.log10(x)) + 1
-            for y in range(length - 1):
-                printed_board += " "
+            if x > 0:
+                length = int(math.log10(x))
+                if length > 1:
+                    for y in range(length - 1):
+                        printed_board += " "
             printed_board += "|"
         printed_board += "\n"
-        print(printed_board)
     return printed_board
 
 def score(board, line, place_col, in_a_row, player_number, play, rows, columns, round):
