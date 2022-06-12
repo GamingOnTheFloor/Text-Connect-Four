@@ -170,7 +170,7 @@ def AI_setter(AIp, AIc, player, all_chars):
 
 def create_board(rows = 6, columns = 7, in_a_row = 4, board = {}, string = ""):
     for i in range(columns):
-        string += ("#")
+        string += "#"
     string += ""
     for i in range(rows):
         board[i] = string
@@ -186,7 +186,7 @@ def print_board(board, columns):
         printed_board += "|"
         for x in range(columns):
             print(f"X1: {x}")
-            printed_board += f"{x}"
+            printed_board += f"{board[i][x]}"
             int(x)
             print(f"X2: {x}")
             if x > 0:
