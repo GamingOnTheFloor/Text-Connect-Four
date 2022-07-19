@@ -185,10 +185,8 @@ def print_board(board, columns):
     for i in board:
         printed_board += "|"
         for x in range(columns):
-            print(f"X1: {x}")
             printed_board += f"{board[i][x]}"
             int(x)
-            print(f"X2: {x}")
             if x > 0:
                 length = int(math.log10(x))
                 if length > 1:
@@ -334,7 +332,7 @@ def main(player_number, player, play, line, board, rows, columns, in_a_row, AIc,
                 print(f"\n\n{print_board(board, columns)}\n")
             place_col = 0
             while place_col not in range(1,columns+1):
-                place_col = input(f"What column would player {player_number + 1} ({player[player_number]}) like to drop your piece in?\n")
+                place_col = input(f"What column would player {player_number + 1} (character {player[player_number]}) like to drop your piece in?\n")
                 try:
                     place_col = int(place_col)
                     if place_col not in range(1,columns+1):
@@ -355,6 +353,8 @@ def main(player_number, player, play, line, board, rows, columns, in_a_row, AIc,
         for i in range(AIc):
             wait = 1 + (0.25 * randint(-1,2))
             time.sleep(wait) #this is to make the bot feel more human, and to make it less frusturating when you are playing 1 on 1 and the bot goes instantly.
-            print(f"{randint(columns)}")
+            for j in range(columns):
+                print(f"{columns[j]}\n")
+            print(f"{random.randint(columns)}")
 
 main(player_number, player, play, line, board, rows, columns, in_a_row, AIc, AIp, round)
