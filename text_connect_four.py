@@ -353,8 +353,6 @@ def main(player_number, player, play, line, board, rows, columns, in_a_row, AIc,
         for i in range(AIc):
             wait = 1 + (0.25 * randint(-1,2))
             time.sleep(wait) #this is to make the bot feel more human, and to make it less frusturating when you are playing 1 on 1 and the bot goes instantly.
-            for j in range(columns):
-                print(f"{columns[j]}\n")
             print(f"{random.randint(columns)}")
 
 main(player_number, player, play, line, board, rows, columns, in_a_row, AIc, AIp, round)
