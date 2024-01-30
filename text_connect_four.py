@@ -45,7 +45,8 @@ def start_screen(amount = "", player = "", all_chars = "0123456789ABCDEFGHIJKLMN
     if max > len(all_chars):
         max = len(all_chars)
     while AIc < 0 or AIc > max:
-        AIc = int(input(f"How many AI players do you want? There is a maximum of {max}.\n"))
+        #AIc = int(input(f"How many AI players do you want? There is a maximum of {max}.\n"))
+        AIc = 0 #remove this line after capstone to reintegrate ai functions
         if AIc == "":
             if amount == 0:
                 AIc = 2
@@ -165,7 +166,7 @@ def AI_setter(AIp, AIc, player, all_chars):
             else:
                 AIp += all_chars[j]
                 break
-    print(f"\nAI characters are: {AIp}\n")
+    #print(f"\nAI characters are: {AIp}\n")
     return AIp
 
 def create_board(rows = 6, columns = 7, in_a_row = 4, board = {}, string = ""):
