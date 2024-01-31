@@ -1,6 +1,8 @@
 import time
 import random
 import math
+import os
+import sys
 from random import seed, randint
 
 # using tabs instead of 4 spaces
@@ -14,6 +16,7 @@ board = {0: "#######/n",
          3: "#######/n",
          4: "#######/n",
          5: "#######/n"}
+keepplaying = 'Y'
 player = ""
 top_line = ""
 player_number = 0
@@ -359,4 +362,14 @@ def main(player_number, player, play, line, board, rows, columns, in_a_row, AIc,
                 time.sleep(wait) #this is to make the bot feel more human, and to make it less frusturating when you are playing 1 on 1 and the bot goes instantly.
                 print(f"{random.randint(columns)}")
 
-main(player_number, player, play, line, board, rows, columns, in_a_row, AIc, AIp, round)
+while keepplaying == 'Y':
+    board = {0: "#######/n",
+         1: "#######/n",
+         2: "#######/n",
+         3: "#######/n",
+         4: "#######/n",
+         5: "#######/n"}
+    os.system("cls")
+    main(player_number, player, play, line, board, rows, columns, in_a_row, AIc, AIp, round)
+    keepplaying = input("\nWould you like to play again? (Y/N)\n")
+    keepplaying = keepplaying[0].upper()
