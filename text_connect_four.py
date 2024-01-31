@@ -325,35 +325,38 @@ def main(player_number, player, play, line, board, rows, columns, in_a_row, AIc,
     player, board, rows, columns, in_a_row, AIc, AIp = start_screen(amount, player)
     play = True
     while play == True:
-        for i in range(len(player)):
-            try:
-                if check != False:
-                    print(f"\n\n{print_board(board, columns)}\n")
-            except Exception as e:
-                print(f"\n\n{print_board(board, columns)}\n")
-            place_col = 0
-            while place_col not in range(1,columns+1):
-                place_col = input(f"What column would player {player_number + 1} (character {player[player_number]}) like to drop your piece in?\n")
+        if play == True:
+            for i in range(len(player)):
                 try:
-                    place_col = int(place_col)
-                    if place_col not in range(1,columns+1):
-                        print(f"Error: '{place_col}' not in range 1-{columns}\n")
+                    if check != False:
+                        print(f"\n\n{print_board(board, columns)}\n")
                 except Exception as e:
-                    if place_col == "q":
-                        print("Goodbye")
-                        return
-                    else:
-                        print(f"Error: '{place_col}' not in range 1-{columns}\n")
-            check, line = replace(lowest_unoccupied_line(place_col, board), place_col, board, player_number, player)
-            play = score(board, line, place_col, in_a_row, player_number, play, rows, columns, round)
-            if check != False:
-                player_number += 1
-                if player_number >= len(player):
-                    player_number = 0
-                round += 1
-        for i in range(AIc):
-            wait = 1 + (0.25 * randint(-1,2))
-            time.sleep(wait) #this is to make the bot feel more human, and to make it less frusturating when you are playing 1 on 1 and the bot goes instantly.
-            print(f"{random.randint(columns)}")
+                    print(f"\n\n{print_board(board, columns)}\n")
+                place_col = 0
+                while place_col not in range(1,columns+1):
+                    place_col = input(f"What column would player {player_number + 1} (character {player[player_number]}) like to drop your piece in?\n")
+                    try:
+                        place_col = int(place_col)
+                        if place_col not in range(1,columns+1):
+                            print(f"Error: '{place_col}' not in range 1-{columns}\n")
+                    except Exception as e:
+                        if place_col == "q":
+                            print("Goodbye")
+                            return
+                        else:
+                            print(f"Error: '{place_col}' not in range 1-{columns}\n")
+                check, line = replace(lowest_unoccupied_line(place_col, board), place_col, board, player_number, player)
+                play = score(board, line, place_col, in_a_row, player_number, play, rows, columns, round)
+                if play == False:
+                    return
+                if check != False:
+                    player_number += 1
+                    if player_number >= len(player):
+                        player_number = 0
+                    round += 1
+            for i in range(AIc):
+                wait = 1 + (0.25 * randint(-1,2))
+                time.sleep(wait) #this is to make the bot feel more human, and to make it less frusturating when you are playing 1 on 1 and the bot goes instantly.
+                print(f"{random.randint(columns)}")
 
 main(player_number, player, play, line, board, rows, columns, in_a_row, AIc, AIp, round)
