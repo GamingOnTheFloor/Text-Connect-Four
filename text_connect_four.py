@@ -123,22 +123,23 @@ def set_player_number(amount, rows, columns, in_a_row):
             else:
                 amount = int((rows * columns) / in_a_row)
                 good = True
-        elif amount == 0:
+        elif amount == '0':
             print("There must be at least one player.")
             good = False
         else:
             try:
                 amount = int(amount)
-                good = True
-                if amount > max:
-                    print(f"You can't have more than {max} players.")
-                    good = False
             except Exception as f:
                 print(f"The amount of players '{amount}' must be a number")
+                good = False
                 amount = set_player_number(amount, rows, columns, in_a_row)
-            if amount > ((rows * columns) / in_a_row):
-                print("That many players can not possibley fit on this board")
+            if amount > max:
+                print(f"You can't have more than {max} players.")
                 amount = set_player_number(amount, rows, columns, in_a_row)
+                good = False
+            else:
+                return amount
+                break            
     return amount
 
 def player_setter(player, amount):
