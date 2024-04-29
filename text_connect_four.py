@@ -94,7 +94,10 @@ def set_score(rows, columns, in_a_row = ""):
         max_score = rows
     else:
         max_score = columns
-    in_a_row = input(f"What is the score to win? The maximum possible is {max_score}. (Default is 4)\n")
+    default_score = 4
+    if max_score < 4:
+        default_score = max_score
+    in_a_row = input(f"What is the score to win? The maximum possible is {max_score}. (Default is {default_score})\n")
     if in_a_row == "":
         if max_score > 4:
             in_a_row = 4
@@ -138,7 +141,6 @@ def set_player_number(amount, rows, columns, in_a_row):
                 amount = set_player_number(amount, rows, columns, in_a_row)
                 good = False
             else:
-                return amount
                 break            
     return amount
 
